@@ -13,32 +13,32 @@ class ErrorResponse extends kyber_server_1.BaseProcessor {
                     message = this.executionContext.raw;
                 }
                 return resolve({
-                    successful: false,
-                    message: message,
-                    httpStatus: this.executionContext.httpStatus,
                     data: {
                         code: -1,
-                        message: message,
+                        comment: args ? args : undefined,
                         correlationId: this.executionContext.correlationId,
                         errors: this.executionContext.errors,
+                        message,
                         warnings: this.executionContext.warnings,
-                        comment: args ? args : undefined
-                    }
+                    },
+                    httpStatus: this.executionContext.httpStatus,
+                    message,
+                    successful: false,
                 });
             }
             catch (err) {
                 return reject({
-                    successful: false,
-                    message: `Error in Error Response`,
-                    httpStatus: 500,
                     data: {
                         code: -1,
-                        message: `Error in Geospatial Conversion Service`,
+                        comment: args ? args : undefined,
                         correlationId: this.executionContext.correlationId,
                         errors: this.executionContext.errors,
+                        message: `Error in Geospatial Conversion Service`,
                         warnings: this.executionContext.warnings,
-                        comment: args ? args : undefined
-                    }
+                    },
+                    httpStatus: 500,
+                    message: `Error in Error Response`,
+                    successful: false,
                 });
             }
         });

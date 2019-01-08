@@ -1,8 +1,7 @@
-import { SchemaDef } from 'kyber-server'
+import { SchemaDef } from 'kyber-server';
 
 export class DefaultResponseSchema extends SchemaDef {
-    id = 'DefaultResponseSchema'
-    schema: any = {
-
-    }
+    public id = 'DefaultResponseSchema';
+    public schema: any = {
+    };
 }

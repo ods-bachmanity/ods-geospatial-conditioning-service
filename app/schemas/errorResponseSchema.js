@@ -7,26 +7,26 @@ class ErrorResponseSchema extends kyber_server_1.SchemaDef {
         this.id = 'ErrorResponseSchema';
         this.schema = {
             code: {
-                type: 'integer'
-            },
-            message: {
-                type: 'string'
+                type: 'integer',
             },
             correlationId: {
-                type: 'string'
+                type: 'string',
             },
             errors: {
-                type: 'array',
                 items: {
-                    type: 'string'
-                }
+                    type: 'string',
+                },
+                type: 'array',
+            },
+            message: {
+                type: 'string',
             },
             warnings: {
-                type: 'array',
                 items: {
-                    type: 'string'
-                }
-            }
+                    type: 'string',
+                },
+                type: 'array',
+            },
         };
     }
 }

@@ -3,7 +3,17 @@
     "extends": [
         "tslint:recommended"
     ],
+    "linterOptions": {
+        "exclude": [
+            "node_modules/**"
+        ]
+    },
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "array-type": [true, "generic"],
+        "max-line-length": [true, 256],
+        "no-console": [false],
+        "quotemark": [true, "single", "backtick"]
+    },
     "rulesDirectory": []
 }

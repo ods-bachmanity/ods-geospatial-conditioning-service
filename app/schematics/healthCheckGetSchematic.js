@@ -12,21 +12,21 @@ class HealthCheckGetSchematic extends kyber_server_1.Schematic {
         this.timeout = 10000;
         this.activities = [
             {
+                activities: [],
+                executionMode: kyber_server_1.ExecutionMode.Concurrent,
                 id: 'COMPOSE',
                 ordinal: 0,
-                executionMode: kyber_server_1.ExecutionMode.Concurrent,
                 processes: [{
-                        class: processors_1.HealthCheckComposer
+                        class: processors_1.HealthCheckComposer,
                     }],
-                activities: []
             }
         ];
         this.responses = [
             {
-                httpStatus: 200,
                 class: kyber_server_1.RawResponse,
-                schema: schemas_1.HealthResponseSchema
-            }
+                httpStatus: 200,
+                schema: schemas_1.HealthResponseSchema,
+            },
         ];
     }
 }

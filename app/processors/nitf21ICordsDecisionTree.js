@@ -17,53 +17,53 @@ class Nitf21ICordsDecisionTree extends kyber_server_1.BaseProcessor {
                 const icoords = this.executionContext.getParameterValue('ICOORDS');
                 this.executionContext.raw = Object.assign({}, {
                     icords: icoords,
-                    igeolo: this.executionContext.getParameterValue('IGEOLO')
+                    igeolo: this.executionContext.getParameterValue('IGEOLO'),
                 });
                 switch (icoords) {
                     case 'D':
                         const decimalDegreeConverter = new nitf21GeospatialConverters_1.DecimalDegreeConverter(this.executionContext, this.processorDef);
                         yield decimalDegreeConverter.fx(args);
                         return resolve({
-                            successful: true
+                            successful: true,
                         });
                     case 'G':
                         const geodeticCoordConverter = new nitf21GeospatialConverters_1.GeodeticCoordsConverter(this.executionContext, this.processorDef);
                         yield geodeticCoordConverter.fx(args);
                         return resolve({
-                            successful: true
+                            successful: true,
                         });
                     case 'U':
                         const utmmgrsCoordConverter = new nitf21GeospatialConverters_1.UTMMGRSCoordsConverter(this.executionContext, this.processorDef);
                         yield utmmgrsCoordConverter.fx(args);
                         return resolve({
-                            successful: true
+                            successful: true,
                         });
                     case 'N':
                         const utmNorthCoordConverter = new nitf21GeospatialConverters_1.UTMNorthCoordsConverter(this.executionContext, this.processorDef);
                         yield utmNorthCoordConverter.fx(args);
                         return resolve({
-                            successful: true
+                            successful: true,
                         });
                     case 'S':
                         const utmSouthCoordConverter = new nitf21GeospatialConverters_1.UTMSouthCoordsConverter(this.executionContext, this.processorDef);
                         yield utmSouthCoordConverter.fx(args);
                         return resolve({
-                            successful: true
+                            successful: true,
                         });
                     default:
                         return reject({
-                            successful: false,
+                            httpStatus: 400,
                             message: `Invalid ICOORDS Value Detected: ${icoords}`,
-                            httpStatus: 400
+                            successful: false,
                         });
                 }
             }
             catch (err) {
                 console.error(`Nitf21ICordsDecisionTree: ${err}`);
                 return reject({
-                    successful: false,
+                    httpStatus: 500,
                     message: `${err}`,
-                    httpStatus: 500
+                    successful: false,
                 });
             }
         }));

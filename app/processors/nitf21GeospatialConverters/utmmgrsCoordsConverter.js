@@ -15,15 +15,15 @@ class UTMMGRSCoordsConverter extends kyber_server_1.BaseProcessor {
             try {
                 this.executionContext.raw.converter = 'UTM MGRS Coords';
                 return resolve({
-                    successful: true
+                    successful: true,
                 });
             }
             catch (err) {
                 console.error(`UTMMGRSCoordsConverter: ${err}`);
                 return reject({
-                    successful: false,
+                    httpStatus: 500,
                     message: `${err}`,
-                    httpStatus: 500
+                    successful: false,
                 });
             }
         }));

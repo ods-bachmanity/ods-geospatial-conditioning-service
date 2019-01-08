@@ -8,12 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const kyber_server_1 = require("kyber-server");
 const config = require("config");
-const schematics_1 = require("./schematics");
+const kyber_server_1 = require("kyber-server");
 const common_1 = require("./common");
+const schematics_1 = require("./schematics");
 const kyber = new kyber_server_1.KyberServer({
-    port: config.port
+    port: config.port,
 });
 const logger = new common_1.Logger();
 kyber.registerGlobalSchematic(schematics_1.GeospatialConditioningServiceSchematic, []);
@@ -21,16 +21,16 @@ kyber.events.on(kyber_server_1.KyberServerEvents.ServerStopping, () => {
     console.log(`\nServer Stopping...`);
 });
 kyber.registerRoute({
-    verb: 'GET',
     path: '/v2/ods/geospatialconditioning/health',
     schematic: schematics_1.HealthCheckGetSchematic,
-    sharedResources: []
+    sharedResources: [],
+    verb: 'GET',
 });
 kyber.registerRoute({
-    verb: 'POST',
     path: '/v2/ods/geospatialconditioning/nitf21',
     schematic: schematics_1.PostNitf21Schematic,
-    sharedResources: []
+    sharedResources: [],
+    verb: 'POST',
 });
 function startup() {
     return __awaiter(this, void 0, void 0, function* () {

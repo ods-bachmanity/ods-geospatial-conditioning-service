@@ -15,15 +15,15 @@ class UTMSouthCoordsConverter extends kyber_server_1.BaseProcessor {
             try {
                 this.executionContext.raw.converter = 'UTM South Coords';
                 return resolve({
-                    successful: true
+                    successful: true,
                 });
             }
             catch (err) {
                 console.error(`UTMSouthCoordsConverter: ${err}`);
                 return reject({
-                    successful: false,
+                    httpStatus: 500,
                     message: `${err}`,
-                    httpStatus: 500
+                    successful: false,
                 });
             }
         }));

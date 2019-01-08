@@ -6,15 +6,15 @@ class HealthResponseSchema extends kyber_server_1.SchemaDef {
         super(...arguments);
         this.id = 'HealthResponseSchema';
         this.schema = {
+            Database: {
+                type: 'string',
+            },
             HealthCheck: {
-                type: 'string'
+                type: 'string',
             },
             Message: {
-                type: 'string'
+                type: 'string',
             },
-            Database: {
-                type: 'string'
-            }
         };
     }
 }

@@ -8,30 +8,30 @@ class GeospatialConditioningServiceSchematic extends kyber_server_1.GlobalSchema
         super(...arguments);
         this.responses = [
             {
+                class: common_1.ErrorResponse,
                 httpStatus: 400,
-                class: common_1.ErrorResponse,
-                schema: schemas_1.ErrorResponseSchema
+                schema: schemas_1.ErrorResponseSchema,
             },
             {
+                class: common_1.ErrorResponse,
                 httpStatus: 404,
-                class: common_1.ErrorResponse,
-                schema: schemas_1.ErrorResponseSchema
+                schema: schemas_1.ErrorResponseSchema,
             },
             {
+                class: common_1.ErrorResponse,
                 httpStatus: 408,
-                class: common_1.ErrorResponse,
-                schema: schemas_1.ErrorResponseSchema
+                schema: schemas_1.ErrorResponseSchema,
             },
             {
+                class: common_1.ErrorResponse,
                 httpStatus: 500,
-                class: common_1.ErrorResponse,
-                schema: schemas_1.ErrorResponseSchema
+                schema: schemas_1.ErrorResponseSchema,
             },
             {
-                httpStatus: 0,
                 class: common_1.ErrorResponse,
-                schema: schemas_1.ErrorResponseSchema
-            }
+                httpStatus: 0,
+                schema: schemas_1.ErrorResponseSchema,
+            },
         ];
     }
 }

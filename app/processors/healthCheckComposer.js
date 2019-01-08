@@ -15,18 +15,18 @@ class HealthCheckComposer extends kyber_server_1.BaseProcessor {
             try {
                 this.executionContext.raw = Object.assign({}, {
                     HealthCheck: `OK`,
-                    Message: `No Rest for Old Men`
+                    Message: `No Rest for Old Men`,
                 });
                 return resolve({
-                    successful: true
+                    successful: true,
                 });
             }
             catch (err) {
                 console.error(`HealthCheckComposer: ${err}`);
                 return reject({
-                    successful: false,
+                    httpStatus: 500,
                     message: `${err}`,
-                    httpStatus: 500
+                    successful: false,
                 });
             }
         }));

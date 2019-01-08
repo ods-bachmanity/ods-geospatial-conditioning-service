@@ -1,68 +1,71 @@
-import { BaseProcessor, ProcessorResponse } from 'kyber-server'
-import { DecimalDegreeConverter, GeodeticCoordsConverter, UTMMGRSCoordsConverter, UTMNorthCoordsConverter, UTMSouthCoordsConverter } from './nitf21GeospatialConverters'
+import { BaseProcessor, ProcessorResponse } from 'kyber-server';
+import { DecimalDegreeConverter,
+    GeodeticCoordsConverter,
+    UTMMGRSCoordsConverter,
+    UTMNorthCoordsConverter,
+    UTMSouthCoordsConverter } from './nitf21GeospatialConverters';
 
 export class Nitf21ICordsDecisionTree extends BaseProcessor {
 
     public fx(args: any): Promise<ProcessorResponse> {
-        
-        const result: Promise<ProcessorResponse> = new Promise(async(resolve, reject) => {
-            
+
+        const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
+
             try {
-                const icoords = this.executionContext.getParameterValue('ICOORDS')
+                const icoords = this.executionContext.getParameterValue('ICOORDS');
                 this.executionContext.raw = Object.assign({}, {
                     icords: icoords,
-                    igeolo: this.executionContext.getParameterValue('IGEOLO')
-                })
+                    igeolo: this.executionContext.getParameterValue('IGEOLO'),
+                });
                 switch (icoords) {
                     case 'D':
-                        const decimalDegreeConverter = new DecimalDegreeConverter(this.executionContext, this.processorDef)
-                        await decimalDegreeConverter.fx(args)
+                        const decimalDegreeConverter = new DecimalDegreeConverter(this.executionContext, this.processorDef);
+                        await decimalDegreeConverter.fx(args);
                         return resolve({
-                            successful: true
-                        })
+                            successful: true,
+                        });
                     case 'G':
-                        const geodeticCoordConverter = new GeodeticCoordsConverter(this.executionContext, this.processorDef)
-                        await geodeticCoordConverter.fx(args)
+                        const geodeticCoordConverter = new GeodeticCoordsConverter(this.executionContext, this.processorDef);
+                        await geodeticCoordConverter.fx(args);
                         return resolve({
-                            successful: true
-                        })
+                            successful: true,
+                        });
                     case 'U':
-                        const utmmgrsCoordConverter = new UTMMGRSCoordsConverter(this.executionContext, this.processorDef)
-                        await utmmgrsCoordConverter.fx(args)
+                        const utmmgrsCoordConverter = new UTMMGRSCoordsConverter(this.executionContext, this.processorDef);
+                        await utmmgrsCoordConverter.fx(args);
                         return resolve({
-                            successful: true
-                        })
+                            successful: true,
+                        });
                     case 'N':
-                        const utmNorthCoordConverter = new UTMNorthCoordsConverter(this.executionContext, this.processorDef)
-                        await utmNorthCoordConverter.fx(args)
+                        const utmNorthCoordConverter = new UTMNorthCoordsConverter(this.executionContext, this.processorDef);
+                        await utmNorthCoordConverter.fx(args);
                         return resolve({
-                            successful: true
-                        })
+                            successful: true,
+                        });
                     case 'S':
-                        const utmSouthCoordConverter = new UTMSouthCoordsConverter(this.executionContext, this.processorDef)
-                        await utmSouthCoordConverter.fx(args)
+                        const utmSouthCoordConverter = new UTMSouthCoordsConverter(this.executionContext, this.processorDef);
+                        await utmSouthCoordConverter.fx(args);
                         return resolve({
-                            successful: true
-                        })
+                            successful: true,
+                        });
                     default:
                         return reject({
-                            successful: false,
+                            httpStatus: 400,
                             message: `Invalid ICOORDS Value Detected: ${icoords}`,
-                            httpStatus: 400
-                        })
+                            successful: false,
+                        });
                 }
-            }
-            catch (err) {
-                console.error(`Nitf21ICordsDecisionTree: ${err}`)
+            } catch (err) {
+                console.error(`Nitf21ICordsDecisionTree: ${err}`);
                 return reject({
-                    successful: false,
+                    httpStatus: 500,
                     message: `${err}`,
-                    httpStatus: 500
-                })
+                    successful: false,
+                });
             }
-        })
+        });
 
-        return result    
-    
+        return result;
+
     }
 }

@@ -15,15 +15,15 @@ class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
             try {
                 this.executionContext.raw.converter = 'Decimal Degrees';
                 return resolve({
-                    successful: true
+                    successful: true,
                 });
             }
             catch (err) {
                 console.error(`DecimalDegreeConverter: ${err}`);
                 return reject({
-                    successful: false,
+                    httpStatus: 500,
                     message: `${err}`,
-                    httpStatus: 500
+                    successful: false,
                 });
             }
         }));

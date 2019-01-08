@@ -1,48 +1,48 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
+const path = require("path");
 const winston = require("winston");
-const kyber_server_1 = require("kyber-server");
 const { combine, timestamp, label, printf } = winston.format;
-const path = require('path');
-const fs = require('fs');
-const myFormat = printf(info => {
+const kyber_server_1 = require("kyber-server");
+const myFormat = printf((info) => {
     if (info.message && typeof info.message === 'object') {
         info.message = JSON.stringify(info.message);
     }
     return JSON.stringify({
-        timestamp: info.timestamp,
         correlationId: info.correlationId,
         level: info.level,
+        message: info.message,
         source: info.source,
-        message: info.message
+        timestamp: info.timestamp,
     });
 });
-const consoleFormat = printf(info => {
+const consoleFormat = printf((info) => {
     if (info.message && typeof info.message === 'object') {
         info.message = JSON.stringify(info.message);
     }
     return JSON.stringify({
-        timestamp: info.timestamp,
         correlationId: info.correlationId,
         level: info.level,
+        message: info.message,
         source: info.source,
-        message: info.message
+        timestamp: info.timestamp,
     });
 });
 class Logger {
     constructor() {
-        this._winstonLogger = null;
-        this._winstonLogger = winston.createLogger({
-            level: 'info',
+        this.winstonLogger = null;
+        this.winstonLogger = winston.createLogger({
             format: myFormat,
+            level: 'info',
             transports: [
                 new winston.transports.File({ filename: this.getDirectory('error'), level: 'error' }),
-                new winston.transports.File({ filename: this.getDirectory('combined') })
-            ]
+                new winston.transports.File({ filename: this.getDirectory('combined') }),
+            ],
         });
         if (process.env.NODE_ENV !== 'production') {
-            this._winstonLogger.add(new winston.transports.Console({
-                format: consoleFormat
+            this.winstonLogger.add(new winston.transports.Console({
+                format: consoleFormat,
             }));
         }
     }
@@ -82,23 +82,23 @@ class Logger {
         });
     }
     log(id, message, source) {
-        this._winstonLogger.info(this.logPayload(id, message, source));
+        this.winstonLogger.info(this.logPayload(id, message, source));
     }
     info(id, message, source) {
-        this._winstonLogger.info(this.logPayload(id, message, source));
+        this.winstonLogger.info(this.logPayload(id, message, source));
     }
     error(id, message, source) {
-        this._winstonLogger.error(this.logPayload(id, message, source));
+        this.winstonLogger.error(this.logPayload(id, message, source));
     }
     warn(id, message, source) {
-        this._winstonLogger.warn(this.logPayload(id, message, source));
+        this.winstonLogger.warn(this.logPayload(id, message, source));
     }
     logPayload(id, message, source) {
         return {
-            message: message,
-            source: source,
             correlationId: id,
-            timestamp: new Date().toISOString()
+            message,
+            source,
+            timestamp: new Date().toISOString(),
         };
     }
     getDirectory(directorySubType) {

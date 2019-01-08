@@ -1,36 +1,35 @@
-import { GlobalSchematic, SchematicResponse } from 'kyber-server'
-import { ErrorResponse } from '../common'
-import { ErrorResponseSchema } from '../schemas'
+import { GlobalSchematic, SchematicResponse } from 'kyber-server';
+import { ErrorResponse } from '../common';
+import { ErrorResponseSchema } from '../schemas';
 
 export class GeospatialConditioningServiceSchematic extends GlobalSchematic {
 
-    responses: Array<SchematicResponse> = [
+    public responses: Array<SchematicResponse> = [
         {
+            class: ErrorResponse,
             httpStatus: 400,
-            class: ErrorResponse,
-            schema: ErrorResponseSchema
+            schema: ErrorResponseSchema,
         },
         {
+            class: ErrorResponse,
             httpStatus: 404,
-            class: ErrorResponse,
-            schema: ErrorResponseSchema
+            schema: ErrorResponseSchema,
         },
         {
+            class: ErrorResponse,
             httpStatus: 408,
-            class: ErrorResponse,
-            schema: ErrorResponseSchema
+            schema: ErrorResponseSchema,
         },
         {
+            class: ErrorResponse,
             httpStatus: 500,
-            class: ErrorResponse,
-            schema: ErrorResponseSchema
+            schema: ErrorResponseSchema,
         },
         {
-            httpStatus: 0,
             class: ErrorResponse,
-            schema: ErrorResponseSchema
-        }
-    ]
+            httpStatus: 0,
+            schema: ErrorResponseSchema,
+        },
+    ];
 
 }
-

@@ -15,15 +15,15 @@ class UTMNorthCoordsConverter extends kyber_server_1.BaseProcessor {
             try {
                 this.executionContext.raw.converter = 'UTM North Coords';
                 return resolve({
-                    successful: true
+                    successful: true,
                 });
             }
             catch (err) {
                 console.error(`UTMNorthCoordsConverter: ${err}`);
                 return reject({
-                    successful: false,
+                    httpStatus: 500,
                     message: `${err}`,
-                    httpStatus: 500
+                    successful: false,
                 });
             }
         }));

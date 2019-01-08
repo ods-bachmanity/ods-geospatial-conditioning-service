@@ -15,15 +15,15 @@ class CountryCodeComposer extends kyber_server_1.BaseProcessor {
             try {
                 this.executionContext.raw.country = 'USA';
                 return resolve({
-                    successful: true
+                    successful: true,
                 });
             }
             catch (err) {
                 console.error(`CountryCodeComposer: ${err}`);
                 return reject({
-                    successful: false,
+                    httpStatus: 500,
                     message: `${err}`,
-                    httpStatus: 500
+                    successful: false,
                 });
             }
         }));

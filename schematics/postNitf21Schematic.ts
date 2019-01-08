@@ -1,56 +1,54 @@
-import { Schematic, Parameter, Activity, ExecutionMode, SchematicResponse, RawResponse } from 'kyber-server'
-import { DefaultResponseSchema } from '../schemas'
-import { Nitf21ICordsDecisionTree, CountryCodeComposer } from '../processors'
+import { Activity, ExecutionMode, Parameter, RawResponse, Schematic, SchematicResponse } from 'kyber-server';
+import { CountryCodeComposer, Nitf21ICordsDecisionTree } from '../processors';
+import { DefaultResponseSchema } from '../schemas';
 
 export class PostNitf21Schematic extends Schematic {
 
-    id: string = 'PostNitf21Schematic'
-    description: string = 'Use POST verb to convert IGEOLO from D, G, N, S or U to DD for NITF2.1 metadata.'
-    parameters: Array<Parameter> = [
+    public id: string = 'PostNitf21Schematic';
+    public description: string = 'Use POST verb to convert IGEOLO from D, G, N, S or U to DD for NITF2.1 metadata.';
+    public parameters: Array<Parameter> = [
         {
-            name: 'ICOORDS',
-            source: 'req.body.ICOORDS',
-            required: true,
             dataType: 'string',
-            whiteList: ['D', 'G', 'N', 'S', 'U']
+            name: 'ICOORDS',
+            required: true,
+            source: 'req.body.ICOORDS',
+            whiteList: ['D', 'G', 'N', 'S', 'U'],
         },
         {
+            dataType: 'string',
             name: 'IGEOLO',
-            source: 'req.body.IGEOLO',
             required: true,
-            dataType: 'string'
-        }
-    ]
-    
-    sharedResources: Array<any> = []
+            source: 'req.body.IGEOLO',
+        },
+    ];
 
-    activities: Array<Activity> = [
+    public activities: Array<Activity> = [
     {
+        activities: [],
+        executionMode: ExecutionMode.Concurrent,
         id: 'DECISION-TREE',
         ordinal: 0,
-        executionMode: ExecutionMode.Concurrent,
         processes: [{
-            class: Nitf21ICordsDecisionTree
+            class: Nitf21ICordsDecisionTree,
         }],
-        activities: []
     },
     {
+        executionMode: ExecutionMode.Concurrent,
         id: 'COUNTRY-CODE-COMPOSER',
         ordinal: 1,
-        executionMode: ExecutionMode.Concurrent,
         processes: [
             {
-                class: CountryCodeComposer
-            }
-        ]
-    }]
+                class: CountryCodeComposer,
+            },
+        ],
+    }];
 
-    responses: Array<SchematicResponse> = [
+    public responses: Array<SchematicResponse> = [
         {
-            httpStatus: 200,
             class: RawResponse,
-            schema: DefaultResponseSchema
-        }
-    ]
+            httpStatus: 200,
+            schema: DefaultResponseSchema,
+        },
+    ];
 
 }

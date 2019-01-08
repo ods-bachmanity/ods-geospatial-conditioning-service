@@ -1,59 +1,59 @@
-import * as winston from 'winston'
-import { KyberServer, KyberServerEvents } from 'kyber-server'
-const { combine, timestamp, label, printf } = winston.format
-const path = require('path')
-const fs = require('fs')
+import * as fs from 'fs'; // const fs = require('fs');
+import * as path from 'path'; // const path = require('path');
+import * as winston from 'winston';
+const { combine, timestamp, label, printf } = winston.format;
+import { KyberServer, KyberServerEvents } from 'kyber-server';
 
-const myFormat = printf(info => {
-    
+const myFormat = printf((info) => {
+
     if (info.message && typeof info.message === 'object') {
-        info.message = JSON.stringify(info.message)
+        info.message = JSON.stringify(info.message);
     }
     return JSON.stringify({
-        timestamp: info.timestamp,
         correlationId: info.correlationId,
         level: info.level,
+        message: info.message,
         source: info.source,
-        message: info.message
-    })
+        timestamp: info.timestamp,
+    });
 
-})
+});
 
-const consoleFormat = printf(info => {
+const consoleFormat = printf((info) => {
     if (info.message && typeof info.message === 'object') {
-        info.message = JSON.stringify(info.message)
+        info.message = JSON.stringify(info.message);
     }
 
     return JSON.stringify({
-        timestamp: info.timestamp,
         correlationId: info.correlationId,
         level: info.level,
+        message: info.message,
         source: info.source,
-        message: info.message
-    })
-})
+        timestamp: info.timestamp,
+    });
+});
 
 export class Logger {
 
-    private _winstonLogger?: winston.Logger = null
+    private winstonLogger?: winston.Logger = null;
     constructor() {
 
-        this._winstonLogger = winston.createLogger({
-            level: 'info',
+        this.winstonLogger = winston.createLogger({
             format: myFormat,
+            level: 'info',
             transports: [
               new winston.transports.File({ filename: this.getDirectory('error'), level: 'error' }),
-              new winston.transports.File({ filename: this.getDirectory('combined') })
-            ]
-        })
+              new winston.transports.File({ filename: this.getDirectory('combined') }),
+            ],
+        });
         //
         // If we're not in production then log to the `console` with the format:
         // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-        // 
+        //
         if (process.env.NODE_ENV !== 'production') {
-            this._winstonLogger.add(new winston.transports.Console({
-                format: consoleFormat
-            }))
+            this.winstonLogger.add(new winston.transports.Console({
+                format: consoleFormat,
+            }));
         }
     }
 
@@ -61,123 +61,123 @@ export class Logger {
 
         // #region Event Handlers
         kyber.events.on(KyberServerEvents.ServerStarted, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.ProcessorStarted, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.ProcessorEnded, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.ActivityStarted, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.ActivityEnded, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.GlobalSchematicError, (args) => {
-            this.error(args.correlationId, args, args.source)
-        })
+            this.error(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.BeginRequest, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.RouteHandlerException, (args) => {
-            this.error(args.correlationId, args, args.source)
-        })
+            this.error(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.ExecutionContextAfterLoadParameters, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.EndRequest, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
 
         kyber.events.on(KyberServerEvents.ServerStopping, (args) => {
-            this.info(args.correlationId, args, args.source)
-        })
+            this.info(args.correlationId, args, args.source);
+        });
         // #endregion
     }
 
     public log(id: string, message: string, source: string) {
-        this._winstonLogger.info(this.logPayload(id, message, source))
+        this.winstonLogger.info(this.logPayload(id, message, source));
     }
     public info(id: string, message: string, source: string) {
-        this._winstonLogger.info(this.logPayload(id, message, source))
+        this.winstonLogger.info(this.logPayload(id, message, source));
     }
     public error(id: string, message: string, source: string) {
-        this._winstonLogger.error(this.logPayload(id, message, source))
+        this.winstonLogger.error(this.logPayload(id, message, source));
     }
     public warn(id: string, message: string, source: string) {
-        this._winstonLogger.warn(this.logPayload(id, message, source))
+        this.winstonLogger.warn(this.logPayload(id, message, source));
     }
 
     private logPayload(id: string, message: string, source: string): any {
         return {
-            message: message,
-            source: source,
             correlationId: id,
-            timestamp: new Date().toISOString()
-        }
+            message,
+            source,
+            timestamp: new Date().toISOString(),
+        };
     }
 
     private getDirectory(directorySubType: string): string {
-    
-        const theDate = new Date()
-        const targetFileName = `${theDate.getUTCDate()}-${this.getMonthName(theDate.getUTCMonth())}-${theDate.getUTCFullYear()}-${directorySubType}.log`
+
+        const theDate = new Date();
+        const targetFileName = `${theDate.getUTCDate()}-${this.getMonthName(theDate.getUTCMonth())}-${theDate.getUTCFullYear()}-${directorySubType}.log`;
         // Make sure logs directory exists
-        this.verifyTargetDirectory(path.join(process.cwd(), 'logs'))
-    
-        const targetPath = path.join(process.cwd(), 'logs', targetFileName)
-        
-        return targetPath
-    
+        this.verifyTargetDirectory(path.join(process.cwd(), 'logs'));
+
+        const targetPath = path.join(process.cwd(), 'logs', targetFileName);
+
+        return targetPath;
+
     }
-    
+
     private verifyTargetDirectory(endpoint: string) {
-    
+
         if (!fs.existsSync(endpoint)) {
-            console.log(`Creating Logging Directory at: ${endpoint}`)
-            fs.mkdirSync(endpoint)
+            console.log(`Creating Logging Directory at: ${endpoint}`);
+            fs.mkdirSync(endpoint);
         }
-    
+
     }
-    
+
     private getMonthName(month: number): string {
-        switch(month) {
+        switch (month) {
             case 0:
-                return 'JAN'
+                return 'JAN';
             case 1:
-                return 'FEB'
+                return 'FEB';
             case 2:
-                return 'MAR'
+                return 'MAR';
             case 3:
-                return 'APR'
+                return 'APR';
             case 4:
-                return 'MAY'
+                return 'MAY';
             case 5:
-                return 'JUN'
+                return 'JUN';
             case 6:
-                return 'JUL'
+                return 'JUL';
             case 7:
-                return 'AUG'
+                return 'AUG';
             case 8:
-                return 'SEP'
+                return 'SEP';
             case 9:
-                return 'OCT'
+                return 'OCT';
             case 10:
-                return 'NOV'
+                return 'NOV';
             case 11:
-                return 'DEC'
+                return 'DEC';
             default:
-                return 'UNK'
+                return 'UNK';
         }
     }
 }

@@ -1,16 +1,16 @@
-import { SchemaDef } from 'kyber-server'
+import { SchemaDef } from 'kyber-server';
 
 export class HealthResponseSchema extends SchemaDef {
-    id = 'HealthResponseSchema'
-    schema = {
+    public id = 'HealthResponseSchema';
+    public schema = {
+        Database: {
+            type: 'string',
+        },
         HealthCheck: {
-            type: 'string'
+            type: 'string',
         },
         Message: {
-            type: 'string'
+            type: 'string',
         },
-        Database: {
-            type: 'string'
-        }
-    }
+    };
 }
