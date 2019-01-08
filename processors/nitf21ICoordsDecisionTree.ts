@@ -1,11 +1,11 @@
 import { BaseProcessor, ProcessorResponse } from 'kyber-server';
 import { DecimalDegreeConverter,
-    GeodeticCoordsConverter,
+    GeographicCoordsConverter,
     UTMMGRSCoordsConverter,
     UTMNorthCoordsConverter,
     UTMSouthCoordsConverter } from './nitf21GeospatialConverters';
 
-export class Nitf21ICordsDecisionTree extends BaseProcessor {
+export class Nitf21ICoordsDecisionTree extends BaseProcessor {
 
     public fx(args: any): Promise<ProcessorResponse> {
 
@@ -25,8 +25,8 @@ export class Nitf21ICordsDecisionTree extends BaseProcessor {
                             successful: true,
                         });
                     case 'G':
-                        const geodeticCoordConverter = new GeodeticCoordsConverter(this.executionContext, this.processorDef);
-                        await geodeticCoordConverter.fx(args);
+                        const geographicCoordsConverter = new GeographicCoordsConverter(this.executionContext, this.processorDef);
+                        await geographicCoordsConverter.fx(args);
                         return resolve({
                             successful: true,
                         });
@@ -56,7 +56,7 @@ export class Nitf21ICordsDecisionTree extends BaseProcessor {
                         });
                 }
             } catch (err) {
-                console.error(`Nitf21ICordsDecisionTree: ${err}`);
+                console.error(`Nitf21ICoordsDecisionTree: ${err}`);
                 return reject({
                     httpStatus: 500,
                     message: `${err}`,

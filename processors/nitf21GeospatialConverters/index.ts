@@ -1,5 +1,5 @@
 export * from './decimalDegreeConverter';
-export * from './geodeticCoordsConverter';
+export * from './geographicCoordsConverter';
 export * from './utmmgrsCoordsConverter';
 export * from './utmNorthCoordsConverter';
 export * from './utmSouthCoordsConverter';

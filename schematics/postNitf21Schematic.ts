@@ -1,5 +1,5 @@
 import { Activity, ExecutionMode, Parameter, RawResponse, Schematic, SchematicResponse } from 'kyber-server';
-import { CountryCodeComposer, Nitf21ICordsDecisionTree } from '../processors';
+import { CountryCodeComposer, Nitf21ICoordsDecisionTree } from '../processors';
 import { DefaultResponseSchema } from '../schemas';
 
 export class PostNitf21Schematic extends Schematic {
@@ -26,15 +26,15 @@ export class PostNitf21Schematic extends Schematic {
     {
         activities: [],
         executionMode: ExecutionMode.Concurrent,
-        id: 'DECISION-TREE',
+        id: 'PROCESS-ICOORDS',
         ordinal: 0,
         processes: [{
-            class: Nitf21ICordsDecisionTree,
+            class: Nitf21ICoordsDecisionTree,
         }],
     },
     {
         executionMode: ExecutionMode.Concurrent,
-        id: 'COUNTRY-CODE-COMPOSER',
+        id: 'PROCESS-COUNTRY-CODES',
         ordinal: 1,
         processes: [
             {
