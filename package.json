@@ -1,0 +1,34 @@
+{
+  "name": "ods-geospatial-conversion-service",
+  "version": "0.0.1",
+  "description": "Convert IGEOLO for ICORDS D, G, N, S or U into DD coordinates",
+  "main": "index.ts",
+  "scripts": {
+    "start": "nodemon -r ts-node/register index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thepepto/ods-geospatial-conversion-service.git"
+  },
+  "author": "Steven Sederburg <stevens@blackspoke.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thepepto/ods-geospatial-conversion-service/issues"
+  },
+  "homepage": "https://github.com/thepepto/ods-geospatial-conversion-service#readme",
+  "dependencies": {
+    "config": "^3.0.1",
+    "dotenv": "^6.2.0",
+    "kyber-server": "0.0.11",
+    "lodash": "^4.17.11",
+    "ts-node": "^7.0.1",
+    "winston": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
+    "@types/node": "^10.12.18",
+    "nodemon": "^1.18.9",
+    "typescript": "^3.2.2"
+  }
+}
