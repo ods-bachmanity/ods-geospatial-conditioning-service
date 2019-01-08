@@ -4,7 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./decimalDegreeConverter"));
-__export(require("./geodeticCoordsConverter"));
+__export(require("./geographicCoordsConverter"));
 __export(require("./utmmgrsCoordsConverter"));
 __export(require("./utmNorthCoordsConverter"));
 __export(require("./utmSouthCoordsConverter"));

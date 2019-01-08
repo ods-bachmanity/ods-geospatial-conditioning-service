@@ -4,5 +4,5 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./healthCheckComposer"));
-__export(require("./nitf21ICordsDecisionTree"));
+__export(require("./nitf21ICoordsDecisionTree"));
 __export(require("./countryCodeComposer"));

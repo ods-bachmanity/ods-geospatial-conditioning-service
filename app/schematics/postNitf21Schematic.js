@@ -27,15 +27,15 @@ class PostNitf21Schematic extends kyber_server_1.Schematic {
             {
                 activities: [],
                 executionMode: kyber_server_1.ExecutionMode.Concurrent,
-                id: 'DECISION-TREE',
+                id: 'PROCESS-ICOORDS',
                 ordinal: 0,
                 processes: [{
-                        class: processors_1.Nitf21ICordsDecisionTree,
+                        class: processors_1.Nitf21ICoordsDecisionTree,
                     }],
             },
             {
                 executionMode: kyber_server_1.ExecutionMode.Concurrent,
-                id: 'COUNTRY-CODE-COMPOSER',
+                id: 'PROCESS-COUNTRY-CODES',
                 ordinal: 1,
                 processes: [
                     {
