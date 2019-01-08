@@ -1,6 +1,6 @@
 import { Schematic, Parameter, Activity, ExecutionMode, SchematicResponse, RawResponse } from 'kyber-server'
 import { ErrorResponse } from '../common'
-import { HealthCheckComposer } from '../composers'
+import { HealthCheckComposer } from '../processors'
 import { HealthResponseSchema } from '../schemas'
 
 export class HealthCheckGetSchematic extends Schematic {

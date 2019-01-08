@@ -128,13 +128,19 @@
             "application/json": {
               "schema": {
                 "properties": {
-                  "todo": {
-                    "type": "string"
+                  "ICOORDS": {
+                    "type": "string",
+                    "example": "D"
+                  },
+                  "IGEOLO": {
+                    "type": "string",
+                    "example": "SAMPLE IGEOLO GOES HERE"
                   }
                 }
               },
               "example": {
-                "todo": "todo"
+                "ICOORDS": "D",
+                "IGEOLO": "SOME IGEOLO GOES HERE"
               }
             }
           }

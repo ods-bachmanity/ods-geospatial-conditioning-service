@@ -1,3 +1,3 @@
 export * from './healthCheckGetSchematic'
 export * from './geospatialConditioningServiceSchematic'
-export * from './postGeospatialConditioningSchematic'
+export * from './postNitf21Schematic'

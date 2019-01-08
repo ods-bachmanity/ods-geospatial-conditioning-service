@@ -1,11 +1,11 @@
-import { Schematic, Parameter, Activity, ExecutionMode, StartsWithAny, SchematicResponse, RawResponse, RawComposer } from 'kyber-server'
-import { ErrorResponse } from '../common'
+import { Schematic, Parameter, Activity, ExecutionMode, SchematicResponse, RawResponse } from 'kyber-server'
 import { DefaultResponseSchema } from '../schemas'
+import { Nitf21ICordsDecisionTree, CountryCodeComposer } from '../processors'
 
 export class PostNitf21Schematic extends Schematic {
 
     id: string = 'PostNitf21Schematic'
-    description: string = 'Use POST verb to convert IGEOLO from D, G, N, S or U to DD.'
+    description: string = 'Use POST verb to convert IGEOLO from D, G, N, S or U to DD for NITF2.1 metadata.'
     parameters: Array<Parameter> = [
         {
             name: 'ICOORDS',
@@ -26,16 +26,23 @@ export class PostNitf21Schematic extends Schematic {
 
     activities: Array<Activity> = [
     {
-        id: 'COMPOSE',
+        id: 'DECISION-TREE',
         ordinal: 0,
         executionMode: ExecutionMode.Concurrent,
         processes: [{
-            class: RawComposer,
-            args: {
-                hello: 'World'
-            }
+            class: Nitf21ICordsDecisionTree
         }],
         activities: []
+    },
+    {
+        id: 'COUNTRY-CODE-COMPOSER',
+        ordinal: 1,
+        executionMode: ExecutionMode.Concurrent,
+        processes: [
+            {
+                class: CountryCodeComposer
+            }
+        ]
     }]
 
     responses: Array<SchematicResponse> = [
