@@ -5,4 +5,4 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./healthCheckGetSchematic"));
 __export(require("./geospatialConditioningServiceSchematic"));
-__export(require("./postGeospatialConditioningSchematic"));
+__export(require("./postNitf21Schematic"));

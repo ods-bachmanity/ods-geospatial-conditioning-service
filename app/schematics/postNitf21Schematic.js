@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const kyber_server_1 = require("kyber-server");
 const schemas_1 = require("../schemas");
+const processors_1 = require("../processors");
 class PostNitf21Schematic extends kyber_server_1.Schematic {
     constructor() {
         super(...arguments);
@@ -25,16 +26,23 @@ class PostNitf21Schematic extends kyber_server_1.Schematic {
         this.sharedResources = [];
         this.activities = [
             {
-                id: 'COMPOSE',
+                id: 'DECISION-TREE',
                 ordinal: 0,
                 executionMode: kyber_server_1.ExecutionMode.Concurrent,
                 processes: [{
-                        class: kyber_server_1.FieldComposer,
-                        args: {
-                            hello: 'World'
-                        }
+                        class: processors_1.Nitf21ICordsDecisionTree
                     }],
                 activities: []
+            },
+            {
+                id: 'COUNTRY-CODE-COMPOSER',
+                ordinal: 1,
+                executionMode: kyber_server_1.ExecutionMode.Concurrent,
+                processes: [
+                    {
+                        class: processors_1.CountryCodeComposer
+                    }
+                ]
             }
         ];
         this.responses = [

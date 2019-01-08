@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const kyber_server_1 = require("kyber-server");
-const composers_1 = require("../composers");
+const processors_1 = require("../processors");
 const schemas_1 = require("../schemas");
 class HealthCheckGetSchematic extends kyber_server_1.Schematic {
     constructor() {
@@ -16,7 +16,7 @@ class HealthCheckGetSchematic extends kyber_server_1.Schematic {
                 ordinal: 0,
                 executionMode: kyber_server_1.ExecutionMode.Concurrent,
                 processes: [{
-                        class: composers_1.HealthCheckComposer
+                        class: processors_1.HealthCheckComposer
                     }],
                 activities: []
             }
