@@ -8,7 +8,6 @@ const kyber = new KyberServer({
     port: config.port,
 });
 
-// declare an instance of the oracle database to be shared with schematics
 const logger = new Logger();
 
 // register a global schematic to handle errors, run before each execution, run after each execution, startup and shutdown

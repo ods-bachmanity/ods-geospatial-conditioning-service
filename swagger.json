@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/v2/ods/geospatialconversion/health": {
+    "/v2/ods/geospatialconditioning/health": {
       "get": {
         "description": "Health check endpoint to verify the application is in service.",
         "responses": {

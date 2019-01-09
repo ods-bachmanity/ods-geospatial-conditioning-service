@@ -6,7 +6,7 @@ export class ErrorResponse extends BaseProcessor {
 
         const result: Promise<ProcessorResponse> = new Promise((resolve, reject) => {
             try {
-                let message = `Error in Geospatial Conversion Service`;
+                let message = `Error in Geospatial Conditioning Service`;
                 if (this.executionContext.httpStatus === 404) {
                     message = `Unable to locate path '${this.executionContext.req.path}'`;
                 }

@@ -20,6 +20,12 @@ export class PostNitf21Schematic extends Schematic {
             required: true,
             source: 'req.body.IGEOLO',
         },
+        {
+            dataType: 'string',
+            name: 'fingerprint',
+            required: true,
+            source: 'req.body.fingerprint',
+        },
     ];
 
     public activities: Array<Activity> = [
