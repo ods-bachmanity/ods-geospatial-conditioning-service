@@ -1,4 +1,5 @@
 import { BaseProcessor, ProcessorResponse } from 'kyber-server';
+import { CountryCodeService, Logger } from '../common';
 
 export class CountryCodeComposer extends BaseProcessor {
 
@@ -7,7 +8,9 @@ export class CountryCodeComposer extends BaseProcessor {
         const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
 
             try {
-                this.executionContext.raw.country = 'USA';
+                const countryCodeService = new CountryCodeService(this.executionContext.correlationId);
+                const response = await countryCodeService.get(this.executionContext.raw.wkt);
+                this.executionContext.raw.countries = response && response.rows ? response.rows : [];
                 return resolve({
                     successful: true,
                 });
@@ -15,7 +18,7 @@ export class CountryCodeComposer extends BaseProcessor {
                 console.error(`CountryCodeComposer: ${err}`);
                 return reject({
                     httpStatus: 500,
-                    message: `${err}`,
+                    message: `${err.message}`,
                     successful: false,
                 });
             }

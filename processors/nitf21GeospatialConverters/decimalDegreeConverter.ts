@@ -8,6 +8,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
 
             try {
                 this.executionContext.raw.converter = 'Decimal Degrees';
+                this.executionContext.raw.wkt = this.executionContext.getParameterValue('IGEOLO');
                 return resolve({
                     successful: true,
                 });
