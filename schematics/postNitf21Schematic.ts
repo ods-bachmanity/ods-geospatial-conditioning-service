@@ -1,5 +1,5 @@
-import { Activity, ExecutionMode, Parameter, RawResponse, Schematic, SchematicResponse } from 'kyber-server';
-import { CountryCodeComposer, Nitf21ICoordsDecisionTree } from '../processors';
+import { Activity, ExecutionMode, Parameter, Schematic, SchematicResponse } from 'kyber-server';
+import { CountryCodeComposer, Nitf21ICoordsDecisionTree, Nitf21Response } from '../processors';
 import { DefaultResponseSchema } from '../schemas';
 
 export class PostNitf21Schematic extends Schematic {
@@ -8,29 +8,28 @@ export class PostNitf21Schematic extends Schematic {
     public description: string = 'Use POST verb to convert IGEOLO from D, G, N, S or U to DD for NITF2.1 metadata.';
     public parameters: Array<Parameter> = [
         {
+            name: 'ICORDS',
             dataType: 'string',
-            name: 'ICOORDS',
             required: true,
-            source: 'req.body.ICOORDS',
+            source: 'req.body.ICORDS',
             whiteList: ['D', 'G', 'N', 'S', 'U'],
         },
         {
-            dataType: 'string',
             name: 'IGEOLO',
+            dataType: 'string',
             required: true,
             source: 'req.body.IGEOLO',
         },
         {
-            dataType: 'string',
             name: 'fingerprint',
+            dataType: 'string',
             required: true,
             source: 'req.body.fingerprint',
         },
     ];
-
+    public timeout: number = 10000;
     public activities: Array<Activity> = [
     {
-        activities: [],
         executionMode: ExecutionMode.Concurrent,
         id: 'PROCESS-ICOORDS',
         ordinal: 0,
@@ -51,7 +50,7 @@ export class PostNitf21Schematic extends Schematic {
 
     public responses: Array<SchematicResponse> = [
         {
-            class: RawResponse,
+            class: Nitf21Response,
             httpStatus: 200,
             schema: DefaultResponseSchema,
         },

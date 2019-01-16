@@ -13,7 +13,11 @@
         "array-type": [true, "generic"],
         "max-line-length": [true, 256],
         "no-console": [false],
-        "quotemark": [true, "single", "backtick"]
+        "quotemark": [true, "single", "backtick"],
+        "ordered-imports": [
+            false
+        ],
+        "object-literal-sort-keys": false
     },
     "rulesDirectory": []
 }

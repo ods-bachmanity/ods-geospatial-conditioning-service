@@ -7,12 +7,12 @@ export class UTMSouthCoordsConverter extends BaseProcessor {
         const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
 
             try {
-                this.executionContext.raw.converter = 'UTM South Coords';
+                this.executionContext.raw.converter = 'UTM South Cords';
                 return resolve({
                     successful: true,
                 });
             } catch (err) {
-                console.error(`UTMSouthCoordsConverter: ${err}`);
+                console.error(`UTMSouthCordsConverter: ${err}`);
                 return reject({
                     httpStatus: 500,
                     message: `${err}`,

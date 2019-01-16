@@ -12,12 +12,12 @@ export class Nitf21ICoordsDecisionTree extends BaseProcessor {
         const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
 
             try {
-                const icoords = this.executionContext.getParameterValue('ICOORDS');
+                const icords = this.executionContext.getParameterValue('ICORDS');
                 this.executionContext.raw = Object.assign({}, {
-                    icords: icoords,
+                    icords,
                     igeolo: this.executionContext.getParameterValue('IGEOLO'),
                 });
-                switch (icoords) {
+                switch (icords) {
                     case 'D':
                         const decimalDegreeConverter = new DecimalDegreeConverter(this.executionContext, this.processorDef);
                         await decimalDegreeConverter.fx(args);
@@ -51,7 +51,7 @@ export class Nitf21ICoordsDecisionTree extends BaseProcessor {
                     default:
                         return reject({
                             httpStatus: 400,
-                            message: `Invalid ICOORDS Value Detected: ${icoords}`,
+                            message: `Invalid ICORDS Value Detected: ${icords}`,
                             successful: false,
                         });
                 }

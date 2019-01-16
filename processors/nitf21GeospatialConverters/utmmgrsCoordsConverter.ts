@@ -7,12 +7,12 @@ export class UTMMGRSCoordsConverter extends BaseProcessor {
         const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
 
             try {
-                this.executionContext.raw.converter = 'UTM MGRS Coords';
+                this.executionContext.raw.converter = 'UTM MGRS Cords';
                 return resolve({
                     successful: true,
                 });
             } catch (err) {
-                console.error(`UTMMGRSCoordsConverter: ${err}`);
+                console.error(`UTMMGRSCordsConverter: ${err}`);
                 return reject({
                     httpStatus: 500,
                     message: `${err}`,
