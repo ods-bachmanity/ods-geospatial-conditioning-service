@@ -14,12 +14,12 @@ class Nitf21ICoordsDecisionTree extends kyber_server_1.BaseProcessor {
     fx(args) {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const icoords = this.executionContext.getParameterValue('ICOORDS');
+                const icords = this.executionContext.getParameterValue('ICORDS');
                 this.executionContext.raw = Object.assign({}, {
-                    icords: icoords,
+                    icords,
                     igeolo: this.executionContext.getParameterValue('IGEOLO'),
                 });
-                switch (icoords) {
+                switch (icords) {
                     case 'D':
                         const decimalDegreeConverter = new nitf21GeospatialConverters_1.DecimalDegreeConverter(this.executionContext, this.processorDef);
                         yield decimalDegreeConverter.fx(args);
@@ -53,7 +53,7 @@ class Nitf21ICoordsDecisionTree extends kyber_server_1.BaseProcessor {
                     default:
                         return reject({
                             httpStatus: 400,
-                            message: `Invalid ICOORDS Value Detected: ${icoords}`,
+                            message: `Invalid ICORDS Value Detected: ${icords}`,
                             successful: false,
                         });
                 }

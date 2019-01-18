@@ -10,22 +10,28 @@ class PostNitf21Schematic extends kyber_server_1.Schematic {
         this.description = 'Use POST verb to convert IGEOLO from D, G, N, S or U to DD for NITF2.1 metadata.';
         this.parameters = [
             {
+                name: 'ICORDS',
                 dataType: 'string',
-                name: 'ICOORDS',
                 required: true,
-                source: 'req.body.ICOORDS',
+                source: 'req.body.ICORDS',
                 whiteList: ['D', 'G', 'N', 'S', 'U'],
             },
             {
-                dataType: 'string',
                 name: 'IGEOLO',
+                dataType: 'string',
                 required: true,
                 source: 'req.body.IGEOLO',
             },
+            {
+                name: 'fingerprint',
+                dataType: 'string',
+                required: true,
+                source: 'req.body.fingerprint',
+            },
         ];
+        this.timeout = 10000;
         this.activities = [
             {
-                activities: [],
                 executionMode: kyber_server_1.ExecutionMode.Concurrent,
                 id: 'PROCESS-ICOORDS',
                 ordinal: 0,
@@ -46,7 +52,7 @@ class PostNitf21Schematic extends kyber_server_1.Schematic {
         ];
         this.responses = [
             {
-                class: kyber_server_1.RawResponse,
+                class: processors_1.Nitf21Response,
                 httpStatus: 200,
                 schema: schemas_1.DefaultResponseSchema,
             },

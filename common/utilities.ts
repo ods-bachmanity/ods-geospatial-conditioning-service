@@ -1,14 +1,14 @@
-import { CoordinateSchema } from '../schemas';
+import { DecimalDegreeCoordinateSchema } from '../schemas';
 
 export class Utilities {
 
-    public static toGeoJSON(input: Array<CoordinateSchema>): any {
+    public static toGeoJSON(input: Array<DecimalDegreeCoordinateSchema>): any {
 
         if (!input || input.length <= 0) {
             return {};
         }
         const result: Array<Array<number>> = [];
-        input.forEach((inputItem: CoordinateSchema) => {
+        input.forEach((inputItem: DecimalDegreeCoordinateSchema) => {
             const point = [];
             point.push(+inputItem.Longitude);
             point.push(+inputItem.Latitude);
@@ -17,7 +17,7 @@ export class Utilities {
         });
         // TODO: Test if need to close shape
         // Push first point onto the end of the array to close GeoJSON polygon.
-        const testItem: CoordinateSchema = input[0];
+        const testItem: DecimalDegreeCoordinateSchema = input[0];
         if (result.length < 5) {
             const point = [];
             point.push(+testItem.Longitude);
@@ -40,13 +40,13 @@ export class Utilities {
 
     }
 
-    public static toWkt(input: Array<CoordinateSchema>): string {
+    public static toWkt(input: Array<DecimalDegreeCoordinateSchema>): string {
 
         if (!input || input.length <= 0) {
             return '';
         }
         let output = 'POLYGON ((';
-        input.forEach((inputItem: CoordinateSchema) => {
+        input.forEach((inputItem: DecimalDegreeCoordinateSchema) => {
             if (output.length > 10) {
                 output += ',';
             }

@@ -9,25 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const kyber_server_1 = require("kyber-server");
-class UTMSouthCoordsConverter extends kyber_server_1.BaseProcessor {
+class Nitf21Response extends kyber_server_1.BaseProcessor {
     fx(args) {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                this.executionContext.raw.converter = 'UTM South Cords';
-                return resolve({
-                    successful: true,
-                });
-            }
-            catch (err) {
-                console.error(`UTMSouthCordsConverter: ${err}`);
-                return reject({
-                    httpStatus: 500,
-                    message: `${err}`,
-                    successful: false,
-                });
-            }
+            const output = Object.assign({}, this.executionContext.raw);
+            resolve({
+                data: output,
+                successful: true,
+            });
         }));
         return result;
     }
 }
-exports.UTMSouthCoordsConverter = UTMSouthCoordsConverter;
+exports.Nitf21Response = Nitf21Response;

@@ -5,7 +5,7 @@ class ErrorResponse extends kyber_server_1.BaseProcessor {
     fx(args) {
         const result = new Promise((resolve, reject) => {
             try {
-                let message = `Error in Geospatial Conversion Service`;
+                let message = `Error in Geospatial Conditioning Service`;
                 if (this.executionContext.httpStatus === 404) {
                     message = `Unable to locate path '${this.executionContext.req.path}'`;
                 }

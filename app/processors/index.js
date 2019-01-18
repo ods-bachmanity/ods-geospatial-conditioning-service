@@ -6,3 +6,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./healthCheckComposer"));
 __export(require("./nitf21ICoordsDecisionTree"));
 __export(require("./countryCodeComposer"));
+__export(require("./nitf21Response"));

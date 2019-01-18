@@ -9,11 +9,64 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const kyber_server_1 = require("kyber-server");
+const common_1 = require("../../common");
 class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
     fx(args) {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                this.executionContext.raw.converter = 'Decimal Degrees';
+                const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
+                if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
+                    console.error(`Invalid IGEOLO: ${nitfIGEOLO}`);
+                    return reject({
+                        message: `Invalid IGEOLO: ${nitfIGEOLO}`,
+                        successful: false,
+                    });
+                }
+                const LAT_LENGTH = 7;
+                const LON_LENGTH = 8;
+                const COORD_LENGTH = 15;
+                const arrCoords = [];
+                for (let i = 0; i <= 3; i++) {
+                    const coordinate = nitfIGEOLO.substr(i * COORD_LENGTH, COORD_LENGTH);
+                    const rawSubLat = coordinate.substr(0, LAT_LENGTH);
+                    const rawSubLon = coordinate.substr(LAT_LENGTH, LON_LENGTH);
+                    let formattedLat = '';
+                    if (rawSubLat[0] === '+') {
+                        formattedLat = rawSubLat.substr(1, LAT_LENGTH - 1);
+                    }
+                    else if (rawSubLat[0] === '-') {
+                        formattedLat = rawSubLat.substr(0, LAT_LENGTH);
+                    }
+                    else {
+                        return reject({
+                            message: `Invalid Latitude Coordinate: ${rawSubLat}`,
+                            successful: false,
+                        });
+                    }
+                    let formattedLon = '';
+                    if (rawSubLon[0] === '+') {
+                        formattedLon = rawSubLon.substr(1, LON_LENGTH - 1);
+                    }
+                    else if (rawSubLon[0] === '-') {
+                        formattedLon = rawSubLon.substr(0, LON_LENGTH);
+                    }
+                    else {
+                        return reject({
+                            message: `Invalid Longitude Coordinate: ${rawSubLon}`,
+                            successful: false,
+                        });
+                    }
+                    arrCoords.push({
+                        Height: '0',
+                        Latitude: formattedLat,
+                        Longitude: formattedLon,
+                    });
+                }
+                if (arrCoords.length > 0) {
+                    this.executionContext.raw.geoJson = common_1.Utilities.toGeoJSON(arrCoords);
+                    this.executionContext.raw.wkt = common_1.Utilities.toWkt(arrCoords);
+                    this.executionContext.raw.coordType = 'D';
+                }
                 return resolve({
                     successful: true,
                 });

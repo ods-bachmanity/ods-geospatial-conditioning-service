@@ -13,13 +13,13 @@ class UTMNorthCoordsConverter extends kyber_server_1.BaseProcessor {
     fx(args) {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                this.executionContext.raw.converter = 'UTM North Coords';
+                this.executionContext.raw.converter = 'UTM North Cords';
                 return resolve({
                     successful: true,
                 });
             }
             catch (err) {
-                console.error(`UTMNorthCoordsConverter: ${err}`);
+                console.error(`UTMNorthCordsConverter: ${err}`);
                 return reject({
                     httpStatus: 500,
                     message: `${err}`,

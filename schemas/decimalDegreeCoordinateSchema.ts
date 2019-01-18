@@ -1,4 +1,4 @@
-export class CoordinateSchema {
+export class DecimalDegreeCoordinateSchema {
     public Longitude: string = '';
     public Latitude: string = '';
     public Height: string = '';

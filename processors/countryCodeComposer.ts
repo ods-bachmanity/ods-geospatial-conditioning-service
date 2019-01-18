@@ -9,8 +9,10 @@ export class CountryCodeComposer extends BaseProcessor {
 
             try {
                 const countryCodeService = new CountryCodeService(this.executionContext.correlationId);
+                console.log(`\n\n\nCALLING COUNTRY CODE SERVICE WITH ${this.executionContext.raw.wkt}\n\n\n`);
                 const response = await countryCodeService.get(this.executionContext.raw.wkt);
                 this.executionContext.raw.countries = response && response.rows ? response.rows : [];
+                console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
                 return resolve({
                     successful: true,
                 });

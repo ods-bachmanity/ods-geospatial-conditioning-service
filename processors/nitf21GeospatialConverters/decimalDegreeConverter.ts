@@ -1,6 +1,6 @@
 import { BaseProcessor, ProcessorResponse } from 'kyber-server';
 import { Utilities } from '../../common';
-import { CoordinateSchema } from '../../schemas';
+import { DecimalDegreeCoordinateSchema } from '../../schemas';
 
 export class DecimalDegreeConverter extends BaseProcessor {
 
@@ -28,7 +28,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                 const LON_LENGTH: number = 8;
                 const COORD_LENGTH: number  = 15;
 
-                const arrCoords: Array<CoordinateSchema> = [];
+                const arrCoords: Array<DecimalDegreeCoordinateSchema> = [];
 
                 for (let i = 0; i <= 3; i++) {   // grab first 15 byte chunk
                     const coordinate = nitfIGEOLO.substr(i * COORD_LENGTH, COORD_LENGTH);
