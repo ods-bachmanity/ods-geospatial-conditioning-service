@@ -6,22 +6,16 @@ Install libraries for the service from project root
 
 `npm install`
 
+Create your local environment variables by creating a local copy of `cfg.env` renamed to `.env`. The program will read the contents from `.env`, not from `cfg.env` since the latter is used just to store the key names in source code without any values.
+
+`cp cfg.env .env`
+
+
 To run development version, from root: `npm start`. This will start the application using `nodemon` which will hot reload the application anytime any file is changed.
 
-### Using PM2 to run the application (Optional)
+`npm start`
 
-Install `PM2` on your local workstation
 
-`npm install pm2 -g`
-
-`pm2 install typescript`
-
-This will run the application using PM2 on your local workstation. For more information on pm2, visit https://pm2.io/doc/en/runtime/overview/
-- `pm2 start index.ts --watch` runs the application using PM2 AND watches for file changes
-- `pm2 start index.ts` without the watch flag will not track any changes. You must `stop` or `restart` to see changes.
-- `pm2 ps` or `pm2 ls` lists all running PM2 processes
-- `pm2 stop id` stops the running process
-- `pm2 start filepath` starts the process and can be either a TypeScript or JavaScript file in Node
 
 ## Usage
 
