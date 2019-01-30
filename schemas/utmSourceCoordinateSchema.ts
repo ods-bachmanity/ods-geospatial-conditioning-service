@@ -1,4 +1,4 @@
-export class MGRSSourceCoordinateSchema {
+export class UTMSourceCoordinateSchema {
     public sourceEasting: string = '';
     public sourceNorthing: string = '';
     public sourceHemisphere: string = '';
