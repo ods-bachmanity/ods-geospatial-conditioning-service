@@ -54,7 +54,6 @@ export class UTMSouthCoordsConverter extends BaseProcessor {
                     });
                 }
 
-
                 const coordinateConversionService = new CoordinateConversionService(this.executionContext.correlationId);
                 const body = await coordinateConversionService.get(coordinateConversionRequest);
 
