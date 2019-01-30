@@ -33,50 +33,46 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                 // Initialize new coordinate conversion request structure to UTM S type.
                 const coordinateConversionRequest = new CoordinateConversionRequestSchema();
                 coordinateConversionRequest.sourceCoordinateType = 34;
-                coordinateConversionRequest.sourceCoordinates as Array<UTMSourceCoordinateSchema>;
+                const coords: Array<UTMSourceCoordinateSchema> = [];
 
                 // Loop over and parse each coordinate substring.
                 for ( let i = 0; i <= 3; i++ ) {
                    // grab first 15 byte chunk
-                    const coordinate = nitfIGEOLO.substr(i*COORD_LENGTH, COORD_LENGTH);
+                    const coordinate = nitfIGEOLO.substr(i * COORD_LENGTH, COORD_LENGTH);
                     // grab zone
-                    const parsedZone = coordinate.substr(0,ZONE_LENGTH);
+                    const parsedZone = coordinate.substr(0, ZONE_LENGTH);
                     // grab easting
-                    const parsedEasting = coordinate.substr(ZONE_LENGTH,EASTING_LENGTH);
+                    const parsedEasting = coordinate.substr(ZONE_LENGTH, EASTING_LENGTH);
                     // grab northing
                     const parsedNorthing = coordinate.substr(ZONE_LENGTH + EASTING_LENGTH, NORTHING_LENGTH);
                     // Add to sourceCoordinates array.
-                    coordinateConversionRequest.sourceCoordinates.push({
+                    const coord: UTMSourceCoordinateSchema = {
                         sourceEasting: parsedEasting,
                         sourceNorthing: parsedNorthing,
                         sourceHemisphere: '',
-                        sourceZoneData: parsedZone
-                    });
+                        sourceZoneData: parsedZone,
+                    };
+                    coords.push(coord);
                 }
 
                 // To be UTM 'N' ICORDS type, at least one of the coordinates must be in the northern hemisphere, we need to find it.
                 // Find the nmin for hemisphere calculations.
-                let nmin = coordinateConversionRequest.sourceCoordinates[0].sourceNorthing;
-                for ( let i = 1; i <= 3; i++ )
-                {
-                    if ( coordinateConversionRequest.sourceCoordinates[i].sourceNorthing < nmin)
-                    {
-                        nmin = coordinateConversionRequest.sourceCoordinates[i].sourceNorthing;
+                let nmin = (coords)[0].sourceNorthing;
+                for ( let i = 1; i <= 3; i++ ) {
+                    if (coords[i].sourceNorthing < nmin) {
+                        nmin = coords[i].sourceNorthing;
                     }
                 }
 
                 // Determine if any northing value is greater than [nmin + 5000000].  (This would put it in the Southern Hemisphere, and the sourceHemisphere will need to be S, not N)
-                for ( let i = 0; i <= 3; i++ )
-                {
-                    if ( coordinateConversionRequest.sourceCoordinates[i].sourceNorthing > (5000000 + nmin) )
-                    {
-                        coordinateConversionRequest.sourceCoordinates[i].sourceHemisphere = 'S';
-                    }
-                    else
-                    {
-                        coordinateConversionRequest.sourceCoordinates[i].sourceHemisphere = 'N';
+                for ( let i = 0; i <= 3; i++ ) {
+                    if ( coords[i].sourceNorthing > (5000000 + nmin) ) {
+                        coords[i].sourceHemisphere = 'S';
+                    } else {
+                        coords[i].sourceHemisphere = 'N';
                     }
                 }
+                coordinateConversionRequest.sourceCoordinates.concat(coords);
 
                 const coordinateConversionService = new CoordinateConversionService(this.executionContext.correlationId);
                 const body = await coordinateConversionService.get(coordinateConversionRequest);
@@ -88,7 +84,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     console.log(`\nUTMNORTHCONVERTER WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
                 }
 
-                //this.executionContext.raw.converter = 'UTM North Cords';
+                // this.executionContext.raw.converter = 'UTM North Cords';
                 return resolve({
                     successful: true,
                 });

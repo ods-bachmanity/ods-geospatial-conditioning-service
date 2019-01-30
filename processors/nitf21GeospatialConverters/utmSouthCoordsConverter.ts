@@ -37,11 +37,11 @@ export class UTMSouthCoordsConverter extends BaseProcessor {
                 // Loop over and parse each coordinate substring.
                 for ( let i = 0; i <= 3; i++ ) {
                     // grab first 15 byte chunk
-                    const coordinate = nitfIGEOLO.substr(i*COORD_LENGTH, COORD_LENGTH);
+                    const coordinate = nitfIGEOLO.substr(i * COORD_LENGTH, COORD_LENGTH);
                     // grab zone
-                    const parsedZone = coordinate.substr(0,ZONE_LENGTH);
+                    const parsedZone = coordinate.substr(0, ZONE_LENGTH);
                     // grab easting
-                    const parsedEasting = coordinate.substr(ZONE_LENGTH,EASTING_LENGTH);
+                    const parsedEasting = coordinate.substr(ZONE_LENGTH, EASTING_LENGTH);
                     // grab northing
                     const parsedNorthing = coordinate.substr(ZONE_LENGTH + EASTING_LENGTH, NORTHING_LENGTH);
 
@@ -50,7 +50,7 @@ export class UTMSouthCoordsConverter extends BaseProcessor {
                         sourceEasting: parsedEasting,
                         sourceNorthing: parsedNorthing,
                         sourceHemisphere: 'S',
-                        sourceZoneData: parsedZone
+                        sourceZoneData: parsedZone,
                     });
                 }
 
@@ -65,7 +65,7 @@ export class UTMSouthCoordsConverter extends BaseProcessor {
                     console.log(`\nUTMSOUTHCONVERTER WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
                 }
 
-                //this.executionContext.raw.converter = 'UTM South Cords';
+                // this.executionContext.raw.converter = 'UTM South Cords';
                 return resolve({
                     successful: true,
                 });
