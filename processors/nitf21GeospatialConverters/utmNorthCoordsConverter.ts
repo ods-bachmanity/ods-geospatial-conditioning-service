@@ -72,7 +72,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                         coords[i].sourceHemisphere = 'N';
                     }
                 }
-                coordinateConversionRequest.sourceCoordinates.concat(coords);
+                coordinateConversionRequest.sourceCoordinates = coords;
 
                 const coordinateConversionService = new CoordinateConversionService(this.executionContext.correlationId);
                 const body = await coordinateConversionService.get(coordinateConversionRequest);
@@ -80,7 +80,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                 if (body && body.Coordinates) {
                     this.executionContext.raw.geoJson = Utilities.toGeoJSON(body.Coordinates);
                     this.executionContext.raw.wkt = Utilities.toWkt(body.Coordinates);
-                    this.executionContext.raw.coordType = 'SN';
+                    this.executionContext.raw.coordType = 'N';
                     console.log(`\nUTMNORTHCONVERTER WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
                 }
 
