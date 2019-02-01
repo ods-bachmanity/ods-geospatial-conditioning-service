@@ -36,17 +36,18 @@ export class PostNitf21Schematic extends Schematic {
         processes: [{
             class: Nitf21ICoordsDecisionTree,
         }],
+        activities: [{
+            executionMode: ExecutionMode.Concurrent,
+            id: 'PROCESS-COUNTRY-CODES',
+            ordinal: 1,
+            processes: [
+                {
+                    class: CountryCodeComposer,
+                },
+            ],
+        }],
     },
-    {
-        executionMode: ExecutionMode.Concurrent,
-        id: 'PROCESS-COUNTRY-CODES',
-        ordinal: 1,
-        processes: [
-            {
-                class: CountryCodeComposer,
-            },
-        ],
-    }];
+    ];
 
     public responses: Array<SchematicResponse> = [
         {
