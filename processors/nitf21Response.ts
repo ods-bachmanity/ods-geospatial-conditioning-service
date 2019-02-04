@@ -5,8 +5,12 @@ export class Nitf21Response extends BaseProcessor {
 
         const result = new Promise<ProcessorResponse>(async (resolve, reject) => {
             const output: any = Object.assign({}, this.executionContext.raw);
+            output.GEO = {};
+            output.GEO.WKT = this.executionContext.raw.wkt;
+            output.GEO.GeoJSON = this.executionContext.raw.geoJson;
+            output.GEO.Countries = this.executionContext.raw.countries;
             resolve({
-                data: output,
+                data: {GEO: output.GEO},
                 successful: true,
             });
         });

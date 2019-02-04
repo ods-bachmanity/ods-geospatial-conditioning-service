@@ -29,24 +29,25 @@ export class PostNitf21Schematic extends Schematic {
     ];
     public timeout: number = 10000;
     public activities: Array<Activity> = [
-    {
-        executionMode: ExecutionMode.Concurrent,
-        id: 'PROCESS-ICOORDS',
-        ordinal: 0,
-        processes: [{
-            class: Nitf21ICoordsDecisionTree,
-        }],
-    },
-    {
-        executionMode: ExecutionMode.Concurrent,
-        id: 'PROCESS-COUNTRY-CODES',
-        ordinal: 1,
-        processes: [
-            {
-                class: CountryCodeComposer,
-            },
-        ],
-    }];
+        {
+            executionMode: ExecutionMode.Concurrent,
+            id: 'PROCESS-ICOORDS',
+            ordinal: 0,
+            processes: [{
+                class: Nitf21ICoordsDecisionTree,
+            }],
+            activities: [{
+                executionMode: ExecutionMode.Concurrent,
+                id: 'PROCESS-COUNTRY-CODES',
+                ordinal: 1,
+                processes: [
+                    {
+                        class: CountryCodeComposer,
+                    },
+                ],
+            }],
+        },
+    ];
 
     public responses: Array<SchematicResponse> = [
         {
