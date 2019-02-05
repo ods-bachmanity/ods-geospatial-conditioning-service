@@ -57,7 +57,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
 
                 // To be UTM 'N' ICORDS type, at least one of the coordinates must be in the northern hemisphere, we need to find it.
                 // Find the nmin for hemisphere calculations.
-                let nmin = (coords)[0].sourceNorthing;
+                let nmin = coords[0].sourceNorthing;
                 for ( let i = 1; i <= 3; i++ ) {
                     if (coords[i].sourceNorthing < nmin) {
                         nmin = coords[i].sourceNorthing;
