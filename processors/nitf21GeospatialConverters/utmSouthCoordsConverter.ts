@@ -1,4 +1,6 @@
 import { BaseProcessor, ProcessorResponse } from 'kyber-server';
+import { CoordinateConversionRequestSchema } from '../../schemas';
+import { CoordinateConversionService, Utilities } from '../../common';
 
 export class UTMSouthCoordsConverter extends BaseProcessor {
 
@@ -7,7 +9,62 @@ export class UTMSouthCoordsConverter extends BaseProcessor {
         const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
 
             try {
-                this.executionContext.raw.converter = 'UTM South Cords';
+                // # Gather the IGEOLO string
+                const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
+                if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
+                    console.error(`Invalid IGEOLO: ${nitfIGEOLO}`);
+                    return reject({
+                        message: `Invalid IGEOLO: ${nitfIGEOLO}`,
+                        successful: false,
+                    });
+                }
+
+                // # Put IGEOLO string into format for loading into object.
+
+                // There are four 15 character coordinate strings in IGEOLO (zzeeeeeennnnnnn)
+                // The first 2 bytes make up Zone portion (zz)
+                // The next 6 bytes make up the easting portion (eeeeee)
+                // The last 7 bytes make up Longitude portion (nnnnnnn)
+                const ZONE_LENGTH: number = 2;
+                const EASTING_LENGTH: number = 6;
+                const NORTHING_LENGTH: number = 7;
+                const COORD_LENGTH: number  = 15;
+
+                // Initialize new coordinate conversion request structure to UTM S type.
+                const coordinateConversionRequest = new CoordinateConversionRequestSchema();
+                coordinateConversionRequest.sourceCoordinateType = 34;
+
+                // Loop over and parse each coordinate substring.
+                for ( let i = 0; i <= 3; i++ ) {
+                    // grab first 15 byte chunk
+                    const coordinate = nitfIGEOLO.substr(i * COORD_LENGTH, COORD_LENGTH);
+                    // grab zone
+                    const parsedZone = coordinate.substr(0, ZONE_LENGTH);
+                    // grab easting
+                    const parsedEasting = coordinate.substr(ZONE_LENGTH, EASTING_LENGTH);
+                    // grab northing
+                    const parsedNorthing = coordinate.substr(ZONE_LENGTH + EASTING_LENGTH, NORTHING_LENGTH);
+
+                    // Add to sourceCoordinates array.
+                    coordinateConversionRequest.sourceCoordinates.push({
+                        sourceEasting: parsedEasting,
+                        sourceNorthing: parsedNorthing,
+                        sourceHemisphere: 'S',
+                        sourceZoneData: parsedZone,
+                    });
+                }
+
+                const coordinateConversionService = new CoordinateConversionService(this.executionContext.correlationId);
+                const body = await coordinateConversionService.get(coordinateConversionRequest);
+
+                if (body && body.Coordinates) {
+                    this.executionContext.raw.geoJson = Utilities.toGeoJSON(body.Coordinates);
+                    this.executionContext.raw.wkt = Utilities.toWkt(body.Coordinates);
+                    this.executionContext.raw.coordType = 'S';
+                    console.log(`\nUTMSOUTHCONVERTER WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
+                }
+
+                // this.executionContext.raw.converter = 'UTM South Cords';
                 return resolve({
                     successful: true,
                 });

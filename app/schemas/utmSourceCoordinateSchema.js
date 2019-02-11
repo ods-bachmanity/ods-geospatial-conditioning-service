@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class MGRSSourceCoordinateSchema {
+class UTMSourceCoordinateSchema {
     constructor() {
         this.sourceEasting = '';
         this.sourceNorthing = '';
@@ -8,4 +8,4 @@ class MGRSSourceCoordinateSchema {
         this.sourceZoneData = '';
     }
 }
-exports.MGRSSourceCoordinateSchema = MGRSSourceCoordinateSchema;
+exports.UTMSourceCoordinateSchema = UTMSourceCoordinateSchema;
