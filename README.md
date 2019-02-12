@@ -30,11 +30,27 @@ POST `/v2/ods/geospatialconditioning/nitf21` with a proper Request body returns 
 ##### Values for NITF21 Request Body
 | Field   | Value |
 |----------|------------------------|
-| `ICOORDS` | one of D, G, U, N or S |
+| `fingerprint` | string representing the fingerprint of the NITF 2.1 source |
+| `ICORDS` | one of D, G, U, N or S |
 | `IGEOLO` | a properly formatted `IGEOLO` string from NITF2.1 metadata |
 
 ##### Response Document Format
-````{TO: DO}````
+``` JSON
+{
+    "GEO": {
+        "WKT": "<string>",
+        "GeoJSON": {
+            "geometry": {
+                "coordinates": [],
+                "type": "Polygon"
+            },
+            "properties": {},
+            "type": "Feature"
+        },
+        "Countries": []
+    }
+}
+```
 
 ## Notes
 Output in the `./app` directory is used for deployment only. Developers should avoid making changes to that directory until they are ready to rev a new version. To do so, simply execute `tsc` on the project root to transpile the TypeScript code into relative JavaScript files. Don't forget to rev the version in both `package.json` files (project root + app directory).
