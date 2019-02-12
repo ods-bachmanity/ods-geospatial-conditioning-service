@@ -15,15 +15,21 @@ export class Utilities {
             point.push(+inputItem.Height);
             result.push(point);
         });
-        // TODO: Test if need to close shape
-        // Push first point onto the end of the array to close GeoJSON polygon.
-        const testItem: DecimalDegreeCoordinateSchema = input[0];
-        if (result.length < 5) {
-            const point = [];
-            point.push(+testItem.Longitude);
-            point.push(+testItem.Latitude);
-            point.push(+testItem.Height);
-            result.push(point);
+
+
+        // Test if need to close shape
+        // Check if shape is a polygon. (Greater than 2 points) Compare first point to last point.
+        // If required, push first point onto the end of the array to close GeoJSON polygon.
+        if (result.length > 2) {
+            const testDDPointFirst: DecimalDegreeCoordinateSchema = input[0];
+            const testDDPointLast: DecimalDegreeCoordinateSchema = input[input.length - 1];
+            if (!this.comparePoints(testDDPointFirst, testDDPointLast)) {
+                const point = [];
+                point.push(+testDDPointFirst.Longitude);
+                point.push(+testDDPointFirst.Latitude);
+                point.push(+testDDPointFirst.Height);
+                result.push(point);
+            }
         }
 
         const wrapper = [];
@@ -37,7 +43,6 @@ export class Utilities {
               properties: {},
               type: 'Feature',
         };
-
     }
 
     public static toWkt(input: Array<DecimalDegreeCoordinateSchema>): string {
@@ -52,13 +57,29 @@ export class Utilities {
             }
             output += `${inputItem.Longitude} ${inputItem.Latitude}`; // ${item.Height}`;
         });
-        // TODO: Test if need to close shape (what if not 4 sides?)
-        if (input.length < 5) {
-            output += `,${input[0].Longitude} ${input[0].Latitude}`; // ${input[0].Height}`;
+        // Test if need to close shape (what if not 4 sides?)
+        // Check if shape is a polygon. (Greater than 2 points) Compare first point to last point.
+        // If required, push first point onto the end of the array to close GeoJSON polygon.
+        if (input.length > 2) {
+            const testDDPointFirst: DecimalDegreeCoordinateSchema = input[0];
+            const testDDPointLast: DecimalDegreeCoordinateSchema = input[input.length - 1];
+            if (!this.comparePoints(testDDPointFirst, testDDPointLast)) {
+                output += `,${input[0].Longitude} ${input[0].Latitude}`; // ${input[0].Height}`;
+            }
         }
         output += '))';
         return output;
 
+    }
+
+    public static comparePoints(pointOne: DecimalDegreeCoordinateSchema, pointTwo: DecimalDegreeCoordinateSchema): boolean {
+        let pointsMatch: boolean = false;
+
+        if (pointOne.Height === pointTwo.Height && pointOne.Latitude === pointTwo.Latitude && pointOne.Longitude === pointTwo.Longitude) {
+            pointsMatch = true;
+        }
+
+        return pointsMatch;
     }
 
 }
