@@ -57,7 +57,7 @@ export class Nitf21ICoordsDecisionTree extends BaseProcessor {
                 }
             } catch (err) {
                 console.error(`Nitf21ICoordsDecisionTree: ${err}`);
-                return reject({
+                return reject(err.httpStatus ? err : {
                     httpStatus: 500,
                     message: `${err}`,
                     successful: false,

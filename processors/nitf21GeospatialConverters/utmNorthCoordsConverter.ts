@@ -4,7 +4,7 @@ import { CoordinateConversionService, Utilities } from '../../common';
 
 export class UTMNorthCoordsConverter extends BaseProcessor {
 
-    public className: string = "UTMNorthCoordsConverter";
+    public className: string = 'UTMNorthCoordsConverter';
 
     public fx(args: any): Promise<ProcessorResponse> {
 
@@ -17,6 +17,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     const errString: string = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
                     console.error(errString);
                     return reject({
+                        httpStatus: 400,
                         message: `${errString}`,
                         successful: false,
                     });
@@ -85,8 +86,8 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     this.executionContext.raw.wkt = Utilities.toWkt(body.Coordinates);
                     this.executionContext.raw.coordType = 'N';
 
-                    // Check if formatting to goeJson and wkt was successful.
-                    let errString: string = "";
+                    // Check if formatting to geoJson and wkt was successful.
+                    let errString: string = '';
                     if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
                         errString += `\nFormatted wkt is empty in processor ${this.className}`;
                     }
@@ -94,23 +95,23 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                         errString += `\nFormatted geoJson is empty in processor ${this.className}`;
                     }
 
-                    // Report failure or log formated wkt string.
+                    // Report failure or log formatted wkt string.
                     if (errString.length > 0) {
                         console.error(errString);
                         return reject({
+                            httpStatus: 400,
                             message: `${errString}`,
                             successful: false,
                         });
-                    }
-                    else {
+                    } else {
                         console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
                     }
 
-                }
-                else {
+                } else {
                     const errString: string = `Missing return from Coordinate Conversion Service in ${this.className}`;
                     console.error(errString);
                     return reject({
+                        httpStatus: 400,
                         message: `${errString}`,
                         successful: false,
                     });
