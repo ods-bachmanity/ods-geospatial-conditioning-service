@@ -8,8 +8,9 @@ pipeline {
     stage('Clean') {
         steps {
             echo 'Cleaning..'
-            sh 'rm -rf app/'
-            sh 'rm -rf GeospatialConditioning*.zip'
+            sh 'rm -rf node_modules'
+            sh 'rm -rf logs'
+            sh 'rm -rf GeospatialConditionerService*.zip'
         }
     }
         stage('Build') {
@@ -36,9 +37,8 @@ pipeline {
                    sh 'echo TEST2: $AWS_SECRET_ACCESS_KEY'
                    echo 'Deploying....'
                    sh 'npm run app-zip'
-                   sh 'mv CountryCodeService.zip "CountryCodeService_$BUILD_NUMBER.zip"'
-                   sh 'aws s3 cp "CountryCodeService_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/Country-Code-Service/'
-                   sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/Country-Code-Service/'
+                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER.zip"'
+                   sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/'
 
                }
             }
