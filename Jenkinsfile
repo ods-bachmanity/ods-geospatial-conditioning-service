@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Deploy') {
         when {
-        branch 'jenkins-file'
+        branch 'jenkins-file-flow'
         }
             steps {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
