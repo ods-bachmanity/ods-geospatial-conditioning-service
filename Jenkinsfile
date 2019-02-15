@@ -36,7 +36,7 @@ pipeline {
                    echo 'Deploying....'
                    sh 'npm run app-zip'
                    sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER.zip"'
-                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/Country-Code-Service/'
+                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
                    sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
 
                }
