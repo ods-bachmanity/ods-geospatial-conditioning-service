@@ -5,7 +5,12 @@
   "main": "index.ts",
   "scripts": {
     "start": "nodemon -r ts-node/register index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "newman-version" : "newman -v",
+    "happy-path-tests": "newman run tests/geospatial_happy_path.json -d tests/happy_path_config.json",
+    "bad-path-tests": "newman run tests/geospatial_bad_path.json -d tests/bad_path_config.json",
+    "tsc-version": "tsc --version",
+    "app-zip": "zip -r -X GeospatialConditionerService.zip . -x *.git* ./node_modules/\\* ./logs/\\*"
   },
   "repository": {
     "type": "git",
@@ -32,6 +37,7 @@
     "@types/node": "^10.12.18",
     "nodemon": "^1.18.9",
     "ts-lint": "^4.5.1",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.2",
+    "newman": "^4.3.1"
   }
 }
