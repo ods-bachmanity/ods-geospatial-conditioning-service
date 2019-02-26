@@ -89,7 +89,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     // Grab ODS.Processor return section from CoordinateConversionService
                     if (!this.executionContext.raw.ods) { this.executionContext.raw.ods = {}; }
                     if (!this.executionContext.raw.ods.processors) { this.executionContext.raw.ods.processors  = []; }
-                    if (body.ODS.Processors) { this.executionContext.raw.ods.processors.push(body.ODS.Processors); }
+                    if (body.ODS && body.ODS.Processors) { this.executionContext.raw.ods.processors.push(body.ODS.Processors); }
 
                     console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.ods, null, 1)}\n\n`);
 
