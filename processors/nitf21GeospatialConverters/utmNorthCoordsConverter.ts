@@ -98,7 +98,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
                         errString += `\nFormatted wkt is empty in processor ${this.className}`;
                     }
-                    if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.geometry.coordinates).length > 0)) {
+                    if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
                         errString += `\nFormatted geoJson is empty in processor ${this.className}`;
                     }
 

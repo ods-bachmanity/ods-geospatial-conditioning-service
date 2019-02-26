@@ -35,12 +35,8 @@ export class Utilities {
         wrapper.push(result);
 
         return {
-            location: {
-                coordinates: wrapper,
-                type: 'Polygon',
-              },
-              properties: {},
-              type: 'Feature',
+            coordinates: wrapper,
+            type: 'Polygon',
         };
     }
 
