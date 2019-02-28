@@ -1,0 +1,38 @@
+{
+  "name": "ods-geospatial-conversion-service",
+  "servicename": "geospatialConditioner",
+  "lastupdated": "2019-02-25T22:19:54.757+00:00",
+  "version": "0.0.9",
+  "description": "Convert IGEOLO for ICORDS D, G, N, S or U into DD coordinates",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js &",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "newman-version": "newman -v",
+    "happy-path-tests": "newman run tests/geospatial_happy_path.json -d tests/happy_path_config.json",
+    "bad-path-tests": "newman run tests/geospatial_bad_path.json -d tests/bad_path_config.json",
+    "app-zip": "zip -r -X GeospatialConditionerService.zip . -x *.git* ./node_modules/\\* ./logs/\\*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thepepto/ods-geospatial-conversion-service.git"
+  },
+  "author": "Steven Sederburg <stevens@blackspoke.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thepepto/ods-geospatial-conversion-service/issues"
+  },
+  "homepage": "https://github.com/thepepto/ods-geospatial-conversion-service#readme",
+  "dependencies": {
+    "config": "^3.0.1",
+    "dotenv": "^6.2.0",
+    "kyber-server": "0.0.12",
+    "lodash": "^4.17.11",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "winston": "^3.1.0"
+  },
+  "devDependencies": {
+    "newman": "^4.3.1"
+  }
+}
