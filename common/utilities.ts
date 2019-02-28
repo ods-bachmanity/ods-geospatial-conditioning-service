@@ -16,7 +16,6 @@ export class Utilities {
             result.push(point);
         });
 
-
         // Test if need to close shape
         // Check if shape is a polygon. (Greater than 2 points) Compare first point to last point.
         // If required, push first point onto the end of the array to close GeoJSON polygon.
@@ -36,12 +35,8 @@ export class Utilities {
         wrapper.push(result);
 
         return {
-            geometry: {
-                coordinates: wrapper,
-                type: 'Polygon',
-              },
-              properties: {},
-              type: 'Feature',
+            coordinates: wrapper,
+            type: 'Polygon',
         };
     }
 
@@ -82,4 +77,30 @@ export class Utilities {
         return pointsMatch;
     }
 
+    public static getOdsProcessorJSON(status: string, addLastUpdated: boolean): any {
+        const date = new Date();
+        let timestamp = date.toISOString();
+        timestamp = timestamp.replace('Z', '+00:00');
+
+        // Grab the service name, version and last updated times from the environment (package.json), load defaults if unavailable.
+        const serviceName: string = process.env.npm_package_servicename ? process.env.npm_package_servicename : 'GCS default';
+        const serviceVersion: string = process.env.npm_package_version ? process.env.npm_package_version : 'default version';
+        const serviceLastUpdated: string = process.env.npm_package_lastupdated ? process.env.npm_package_lastupdated : '1970-01-01T00:00:00.000+00:00';
+
+        const jsonReturn = {};
+
+        // Generate ODS.Processor inital return structure.
+        jsonReturn[serviceName] = {
+            status: `${status}`,
+            timestamp: `${timestamp}`,
+            version: `${serviceVersion}`,
+        };
+
+        // If requested, add last updated field to ODS.Processor.<servicename> return structure.
+        if (addLastUpdated) {
+            jsonReturn[serviceName].lastUpdated = serviceLastUpdated;
+        }
+
+        return jsonReturn;
+    }
 }

@@ -18,6 +18,15 @@ class CountryCodeComposer extends kyber_server_1.BaseProcessor {
                 console.log(`\n\n\nCALLING COUNTRY CODE SERVICE WITH ${this.executionContext.raw.wkt}\n\n\n`);
                 const response = yield countryCodeService.get(this.executionContext.raw.wkt);
                 this.executionContext.raw.countries = response && response.rows ? response.rows : [];
+                if (!this.executionContext.raw.ods) {
+                    this.executionContext.raw.ods = {};
+                }
+                if (!this.executionContext.raw.ods.processors) {
+                    this.executionContext.raw.ods.processors = [];
+                }
+                if (response && response.ODS && response.ODS.Processors) {
+                    this.executionContext.raw.ods.processors.push(response.ODS.Processors);
+                }
                 console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
                 return resolve({
                     successful: true,

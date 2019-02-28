@@ -1,6 +1,8 @@
 {
   "name": "ods-geospatial-conversion-service",
-  "version": "0.0.1",
+  "servicename": "geospatialConditioner",
+  "lastupdated": "2019-02-25T22:19:54.757+00:00",
+  "version": "0.0.9",
   "description": "Convert IGEOLO for ICORDS D, G, N, S or U into DD coordinates",
   "main": "index.ts",
   "scripts": {
@@ -10,6 +12,7 @@
     "happy-path-tests": "newman run tests/geospatial_happy_path.json -d tests/happy_path_config.json",
     "bad-path-tests": "newman run tests/geospatial_bad_path.json -d tests/bad_path_config.json",
     "tsc-version": "tsc --version",
+    "tsc-build": "tsc",
     "app-zip": "zip -r -X GeospatialConditionerService.zip . -x *.git* ./node_modules/\\* ./logs/\\*"
   },
   "repository": {

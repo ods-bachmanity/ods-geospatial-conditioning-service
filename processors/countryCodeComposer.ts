@@ -9,10 +9,23 @@ export class CountryCodeComposer extends BaseProcessor {
 
             try {
                 const countryCodeService = new CountryCodeService(this.executionContext.correlationId);
+
+                // DEBUG
                 console.log(`\n\n\nCALLING COUNTRY CODE SERVICE WITH ${this.executionContext.raw.wkt}\n\n\n`);
+                // DEBUG
+
                 const response = await countryCodeService.get(this.executionContext.raw.wkt);
                 this.executionContext.raw.countries = response && response.rows ? response.rows : [];
+
+                // Grab ODS.Processor return section from CountryCodeService
+                if (!this.executionContext.raw.ods) { this.executionContext.raw.ods = {}; }
+                if (!this.executionContext.raw.ods.processors) { this.executionContext.raw.ods.processors  = []; }
+                if (response && response.ODS && response.ODS.Processors) { this.executionContext.raw.ods.processors.push(response.ODS.Processors); }
+
+                // DEBUG
                 console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
+                // DEBUG
+
                 return resolve({
                     successful: true,
                 });

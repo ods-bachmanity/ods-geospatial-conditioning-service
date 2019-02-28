@@ -12,14 +12,21 @@ const kyber_server_1 = require("kyber-server");
 const schemas_1 = require("../../schemas");
 const common_1 = require("../../common");
 class UTMMGRSCoordsConverter extends kyber_server_1.BaseProcessor {
+    constructor() {
+        super(...arguments);
+        this.className = 'UTMMGRSCoordsConverter';
+    }
     fx(args) {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
+                let errString = '';
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
-                    console.error(`Invalid IGEOLO: ${nitfIGEOLO}`);
+                    errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
+                    console.error(errString);
                     return reject({
-                        message: `Invalid IGEOLO: ${nitfIGEOLO}`,
+                        httpStatus: 400,
+                        message: `${errString}`,
                         successful: false,
                     });
                 }
@@ -38,14 +45,51 @@ class UTMMGRSCoordsConverter extends kyber_server_1.BaseProcessor {
                     this.executionContext.raw.geoJson = common_1.Utilities.toGeoJSON(body.Coordinates);
                     this.executionContext.raw.wkt = common_1.Utilities.toWkt(body.Coordinates);
                     this.executionContext.raw.coordType = 'U';
-                    console.log(`\nUTMMGRSCONVERTER WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
+                    if (!this.executionContext.raw.ods) {
+                        this.executionContext.raw.ods = {};
+                    }
+                    if (!this.executionContext.raw.ods.processors) {
+                        this.executionContext.raw.ods.processors = [];
+                    }
+                    if (body.ODS && body.ODS.Processors) {
+                        this.executionContext.raw.ods.processors.push(body.ODS.Processors);
+                    }
+                    console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
+                    errString = '';
+                    if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
+                        errString += `\nFormatted wkt is empty in processor ${this.className}`;
+                    }
+                    if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
+                        errString += `\nFormatted geoJson is empty in processor ${this.className}`;
+                    }
+                    if (errString.length > 0) {
+                        console.error(errString);
+                        return reject({
+                            httpStatus: 400,
+                            message: `${errString}`,
+                            successful: false,
+                        });
+                    }
+                    else {
+                        console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
+                    }
                 }
+                else {
+                    errString = `Missing return from Coordinate Conversion Service in ${this.className}`;
+                    console.error(errString);
+                    return reject({
+                        httpStatus: 400,
+                        message: `${errString}`,
+                        successful: false,
+                    });
+                }
+                this.executionContext.raw.converter = `${this.className}`;
                 return resolve({
                     successful: true,
                 });
             }
             catch (err) {
-                console.error(`UTMMGRSCordsConverter: ${err}`);
+                console.error(`${this.className}: ${err}`);
                 return reject({
                     httpStatus: 500,
                     message: `${err}`,
