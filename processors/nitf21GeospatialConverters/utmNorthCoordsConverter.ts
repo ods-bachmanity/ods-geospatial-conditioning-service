@@ -11,10 +11,12 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
         const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
 
             try {
+                let errString: string = '';
+
                 // # Gather the IGEOLO string
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
-                    const errString: string = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
+                    errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
                     console.error(errString);
                     return reject({
                         httpStatus: 400,
@@ -86,12 +88,19 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     this.executionContext.raw.wkt = Utilities.toWkt(body.Coordinates);
                     this.executionContext.raw.coordType = 'N';
 
+                    // Grab ODS.Processor return section from CoordinateConversionService
+                    if (!this.executionContext.raw.ods) { this.executionContext.raw.ods = {}; }
+                    if (!this.executionContext.raw.ods.processors) { this.executionContext.raw.ods.processors  = []; }
+                    if (body.ODS && body.ODS.Processors) { this.executionContext.raw.ods.processors.push(body.ODS.Processors); }
+
+                    console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.ods, null, 1)}\n\n`);
+
                     // Check if formatting to geoJson and wkt was successful.
-                    let errString: string = '';
+                    errString = '';
                     if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
                         errString += `\nFormatted wkt is empty in processor ${this.className}`;
                     }
-                    if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.geometry.coordinates).length > 0)) {
+                    if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
                         errString += `\nFormatted geoJson is empty in processor ${this.className}`;
                     }
 
@@ -106,9 +115,8 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     } else {
                         console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
                     }
-
                 } else {
-                    const errString: string = `Missing return from Coordinate Conversion Service in ${this.className}`;
+                    errString = `Missing return from Coordinate Conversion Service in ${this.className}`;
                     console.error(errString);
                     return reject({
                         httpStatus: 400,
@@ -117,7 +125,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     });
                 }
 
-                // this.executionContext.raw.converter = 'UTM North Cords';
+                this.executionContext.raw.converter = `${this.className}`;
                 return resolve({
                     successful: true,
                 });

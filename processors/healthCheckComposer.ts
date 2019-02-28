@@ -1,4 +1,5 @@
 import { BaseProcessor, ProcessorResponse } from 'kyber-server';
+import { Utilities } from '../common';
 
 export class HealthCheckComposer extends BaseProcessor {
 
@@ -7,10 +8,10 @@ export class HealthCheckComposer extends BaseProcessor {
         const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
 
             try {
-                this.executionContext.raw = Object.assign({}, {
-                    HealthCheck: `OK`,
-                    Message: `No Rest for Old Men`,
-                });
+                // Add ODS.Processors return structure to health check.
+                if (!this.executionContext.raw.ODS) { this.executionContext.raw.ODS = {}; }
+                if (!this.executionContext.raw.ODS.Processors) { this.executionContext.raw.ODS.Processors  = {}; }
+                this.executionContext.raw.ODS.Processors = Object.assign({}, Utilities.getOdsProcessorJSON('No Rest for Old Men', true));
                 return resolve({
                     successful: true,
                 });

@@ -4,21 +4,28 @@ import { DecimalDegreeCoordinateSchema } from '../../schemas';
 
 export class DecimalDegreeConverter extends BaseProcessor {
 
+    public className: string = 'DecimalDegreeConverter';
+
     public fx(args: any): Promise<ProcessorResponse> {
 
         const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
 
             try {
+                let errString: string = '';
+
+                // # Gather the IGEOLO string
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
-                    console.error(`Invalid IGEOLO: ${nitfIGEOLO}`);
+                    errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
+                    console.error(errString);
                     return reject({
-                        message: `Invalid IGEOLO: ${nitfIGEOLO}`,
+                        httpStatus: 400,
+                        message: `${errString}`,
                         successful: false,
                     });
                 }
 
-                // # Put it into format for loading into object.
+                // # Put IGEOLO string into format for loading into object.
 
                 // There are four 15 character coordinate strings in IGEOLO
                 // First 7 bytes make up Latitude portion (±dd.ddd)
@@ -46,6 +53,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                         formattedLat = rawSubLat.substr(0, LAT_LENGTH);
                     } else {
                         return reject({
+                            httpStatus: 400,
                             message: `Invalid Latitude Coordinate: ${rawSubLat}`,
                             successful: false,
                         });
@@ -60,6 +68,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                         formattedLon = rawSubLon.substr(0, LON_LENGTH);
                     } else {
                         return reject({
+                            httpStatus: 400,
                             message: `Invalid Longitude Coordinate: ${rawSubLon}`,
                             successful: false,
                         });
@@ -79,12 +88,32 @@ export class DecimalDegreeConverter extends BaseProcessor {
                     this.executionContext.raw.coordType = 'D';
                 }
 
+                // Check if formatting to geoJson and wkt was successful.
+                errString = '';
+                if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
+                    errString += `\nFormatted wkt is empty in processor ${this.className}`;
+                }
+                if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
+                    errString += `\nFormatted geoJson is empty in processor ${this.className}`;
+                }
+
+                // Report failure or log formatted wkt string.
+                if (errString.length > 0) {
+                    console.error(errString);
+                    return reject({
+                        httpStatus: 400,
+                        message: `${errString}`,
+                        successful: false,
+                    });
+                }
+
+                this.executionContext.raw.converter = `${this.className}`;
                 return resolve({
                     successful: true,
                 });
 
             } catch (err) {
-                console.error(`DecimalDegreeConverter: ${err}`);
+                console.error(`${this.className}: ${err}`);
                 return reject({
                     httpStatus: 500,
                     message: `${err}`,

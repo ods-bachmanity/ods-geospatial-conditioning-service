@@ -23,7 +23,7 @@ export class PostNitf21Schematic extends Schematic {
         {
             name: 'fingerprint',
             dataType: 'string',
-            required: true,
+            required: false,
             source: 'req.body.fingerprint',
         },
     ];
