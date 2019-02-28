@@ -60,7 +60,7 @@ class Nitf21ICoordsDecisionTree extends kyber_server_1.BaseProcessor {
             }
             catch (err) {
                 console.error(`Nitf21ICoordsDecisionTree: ${err}`);
-                return reject({
+                return reject(err.httpStatus ? err : {
                     httpStatus: 500,
                     message: `${err}`,
                     successful: false,
