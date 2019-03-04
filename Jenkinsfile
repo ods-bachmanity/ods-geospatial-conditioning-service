@@ -27,14 +27,13 @@ pipeline {
             }
         }
         stage('Deploy') {
-						steps {	if (BRANCH_NAME == 'jenkins-update') {
-
-			             echo 'inside jenkins $BRANCH_NAME'
-								 }
-
-						 if (BRANCH_NAME == 'dev') {
+					steps {
+							if (env.BRANCH_NAME == 'jenkis-update') {
+								echo 'I only execute on the $BRANCH_NAME'
+								} else {
 									echo 'I execute elsewhere'
-							}}
+								}
 						}
 					}
 				}
+			}
