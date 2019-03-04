@@ -28,12 +28,12 @@ pipeline {
             }
         }
         stage('Deploy') {
-        if(env.BRANCH_NAME == 'jenkins-update-'){
+        if(env.BRANCH_NAME == 'dev'){
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
                    echo 'Deploying Feature....'
                    sh 'npm run app-zip'
-                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER+"FEATURE.zip"'
-                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER+"FEATURE.zip"" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
+                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER+"DEV.zip"'
+                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER+"DEV.zip"" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
                    sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 
                }
