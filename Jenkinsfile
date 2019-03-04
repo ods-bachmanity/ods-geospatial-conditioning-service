@@ -9,6 +9,7 @@ pipeline {
         steps {
             echo 'Cleaning..'
             sh 'rm -rf node_modules'
+						sh 'rm -rf app/node_modules'
             sh 'rm -rf logs'
             sh 'rm -rf GeospatialConditionerService*.zip'
         }
@@ -17,7 +18,7 @@ pipeline {
             steps {
                 echo 'Building..'
 								sh 'cd app && npm install'
-								sh 'pwd'
+								sh 'npm install'
                 sh 'npm run tsc-version'
                 sh 'npm run tsc-build'
                 sh 'ls -l app/'
@@ -39,7 +40,6 @@ pipeline {
                    sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_feature_$BUILD_NUMBER.zip"'
                    sh 'aws s3 cp "GeospatialConditionerService_feature_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
                    sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
-
                }
             }
         }
@@ -54,7 +54,6 @@ pipeline {
 									 sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_dev_$BUILD_NUMBER.zip"'
 									 sh 'aws s3 cp "GeospatialConditionerService_dev_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 									 sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
-
 							 }
 						}
 				}
@@ -69,7 +68,6 @@ pipeline {
 									 sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_master_$BUILD_NUMBER.zip"'
 									 sh 'aws s3 cp "GeospatialConditionerService__master_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 									 sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
-
 							 }
 						}
 				}
