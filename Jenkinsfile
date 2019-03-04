@@ -4,6 +4,7 @@ pipeline {
 
     stages {
 
+
     stage('Clean') {
         steps {
             echo 'Cleaning..'
@@ -26,18 +27,50 @@ pipeline {
                 echo 'Testing..'
             }
         }
-        stage('Deploy') {
-					steps {
-						if (BRANCH_NAME == 'jenkins-update') {
+        stage('Deploy-Feature') {
+        when {
+        branch 'jenkins-update'
+        }
+            steps {
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
+                   echo 'Deploying feature branch....'
+                   sh 'npm run app-zip'
+                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER"+"_FEATURE.zip"'
+                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER"+"_feature.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
+                   sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 
-							withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
-								 echo 'Deploying Feature...'
- 
- 								 }
-					} else if  (BRANCH_NAME == 'dev') {
-					 echo 'I execute elsewhere'
-				 }
-			}
-					}
+               }
+            }
+        }
+				stage('Deploy-Dev') {
+				when {
+				branch 'dev'
 				}
-			}
+						steps {
+						withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
+									 echo 'Deploying dev branch....'
+									 sh 'npm run app-zip'
+									 sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER"+"_dev.zip"'
+									 sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER"+"_dev.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
+									 sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
+
+							 }
+						}
+				}
+				stage('Deploy-Master') {
+				when {
+				branch 'master'
+				}
+						steps {
+						withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
+									 echo 'Deploying master branch....'
+									 sh 'npm run app-zip'
+									 sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER"+"_master.zip"'
+									 sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER"+"_master.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
+									 sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
+
+							 }
+						}
+				}
+    }
+}
