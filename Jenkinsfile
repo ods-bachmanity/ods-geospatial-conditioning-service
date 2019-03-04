@@ -28,12 +28,16 @@ pipeline {
         }
         stage('Deploy') {
 					steps {
-							if (env.BRANCH_NAME == 'jenkis-update') {
-								echo 'I only execute on the $BRANCH_NAME'
-								} else {
-									echo 'I execute elsewhere'
-								}
-						}
+						if (BRANCH_NAME == 'jenkins-update') {
+
+							withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
+								 echo 'Deploying Feature...'
+ 
+ 								 }
+					} else if  (BRANCH_NAME == 'dev') {
+					 echo 'I execute elsewhere'
+				 }
+			}
 					}
 				}
 			}
