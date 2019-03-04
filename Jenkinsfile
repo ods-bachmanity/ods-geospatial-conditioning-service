@@ -35,8 +35,8 @@ pipeline {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
                    echo 'Deploying feature branch....'
                    sh 'npm run app-zip'
-                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER_feature.zip"'
-                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER_feature.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
+                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_feature_$BUILD_NUMBER.zip"'
+                   sh 'aws s3 cp "GeospatialConditionerService_feature_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
                    sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 
                }
@@ -50,8 +50,8 @@ pipeline {
 						withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
 									 echo 'Deploying dev branch....'
 									 sh 'npm run app-zip'
-									 sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER"+"_dev.zip"'
-									 sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER"+"_dev.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
+									 sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_dev_$BUILD_NUMBER.zip"'
+									 sh 'aws s3 cp "GeospatialConditionerService_dev_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 									 sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 
 							 }
@@ -65,8 +65,8 @@ pipeline {
 						withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
 									 echo 'Deploying master branch....'
 									 sh 'npm run app-zip'
-									 sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER"+"_master.zip"'
-									 sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER"+"_master.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
+									 sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_master_$BUILD_NUMBER.zip"'
+									 sh 'aws s3 cp "GeospatialConditionerService__master_$BUILD_NUMBER.zip" s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 									 sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 
 							 }
