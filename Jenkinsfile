@@ -29,7 +29,6 @@ pipeline {
         }
         stage('Deploy') {
         if(env.BRANCH_NAME == 'jenkins-update-'){
-            steps {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
                    echo 'Deploying Feature....'
                    sh 'npm run app-zip'
@@ -39,10 +38,7 @@ pipeline {
 
                }
             }
-            }
         if(env.BRANCH_NAME == 'dev'){
-
-            steps {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
                    echo 'Deploying Develop....'
                    sh 'npm run app-zip'
@@ -52,9 +48,7 @@ pipeline {
 
                }
             }
-            }
             if(env.BRANCH_NAME == 'master'){
-                steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
                        echo 'Deploying Master....'
                        sh 'npm run app-zip'
@@ -63,7 +57,6 @@ pipeline {
                        sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 
                    }
-                }
               }
         }
     }
