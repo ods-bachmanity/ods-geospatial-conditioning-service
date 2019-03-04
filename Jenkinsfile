@@ -28,15 +28,14 @@ pipeline {
             }
         }
         stage('Deploy') {
-        if (env.BRANCH_NAME == "master"){
-            steps {
-            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
-                   echo 'Deploying....'
-                   sh 'npm run app-zip'
-                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER_DEV.zip"'
-                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER_DEV.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
-                   sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
-               }
+        steps {
+        script {
+        if (env.BRANCH_NAME == 'jenkins-update') {
+        echo 'I only execute on the master branch'
+        } else {
+        echo 'I execute elsewhere'
+        }
+        }
             }
           }
         }
