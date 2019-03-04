@@ -27,11 +27,14 @@ pipeline {
             }
         }
         stage('Deploy') {
-					steps {
+
 						if (BRANCH_NAME == 'jenkins-update') {
+								steps {
 			             echo 'inside jenkins $BRANCH_NAME'
-								}
+								 }
+							 }
 						 if (BRANCH_NAME == 'dev') {
+							 	steps {
 									echo 'I execute elsewhere'
 								}
 							}
