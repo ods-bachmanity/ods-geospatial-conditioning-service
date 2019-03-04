@@ -16,7 +16,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+								sh 'cd app'
                 sh 'npm install'
+								sh 'cd ..'
                 sh 'npm run tsc-version'
                 sh 'npm run tsc-build'
                 sh 'ls -l app/'
