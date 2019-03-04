@@ -35,8 +35,8 @@ pipeline {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
                    echo 'Deploying feature branch....'
                    sh 'npm run app-zip'
-                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER"+"_FEATURE.zip"'
-                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER"+"_feature.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
+                   sh 'mv GeospatialConditionerService.zip "GeospatialConditionerService_$BUILD_NUMBER_feature.zip"'
+                   sh 'aws s3 cp "GeospatialConditionerService_$BUILD_NUMBER_feature.zip" s3://ods-sa-t1-io/Bachmanity/coordinate-conditioner-service-files/'
                    sh 'aws s3 ls s3://ods-sa-t1-io/Bachmanity/geospatial-conditioner-files/'
 
                }
