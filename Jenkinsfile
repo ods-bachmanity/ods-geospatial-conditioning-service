@@ -28,16 +28,18 @@ pipeline {
             }
         }
         stage('Deploy') {
-        steps {
-        script {
-        if (env.BRANCH_NAME == 'jenkins-update') {
-        echo 'I only execute on the master branch'
-        } else {
-        echo 'I execute elsewhere'
-        }
-        }
+            steps {
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
+
+            script {
+         if (env.BRANCH_NAME == 'master') {
+                 echo 'I only execute on the master branch'
+         } else {
+                 echo 'I execute elsewhere'
+         }
+ }}
+               }
             }
-          }
+            
         }
-    }
 }
