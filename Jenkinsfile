@@ -28,7 +28,7 @@ pipeline {
             }
         }
         stage('Deploy') {
-        if env.BRANCH_NAME == "master"{
+        if (env.BRANCH_NAME == "master"){
             steps {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'backmanity-conditioner-aws', variable: 'AWS_ACCESS_KEY_ID']]) {
                    echo 'Deploying....'
