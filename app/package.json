@@ -1,19 +1,17 @@
 {
   "name": "ods-geospatial-conversion-service",
   "servicename": "geospatialConditioner",
-  "lastupdated": "2019-03-04T19:23:09.155+00:00",
+  "lastupdated": "2019-03-05T16:46:13.773+00:00",
   "version": "0.0.10",
   "description": "Convert IGEOLO for ICORDS D, G, N, S or U into DD coordinates",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon -r ts-node/register index.ts",
+    "start": "NODE_ENV=production node index.js &",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "newman-version" : "newman -v",
+    "newman-version": "newman -v",
     "happy-path-tests": "newman run tests/geospatial_happy_path.json -d tests/happy_path_config.json",
     "bad-path-tests": "newman run tests/geospatial_bad_path.json -d tests/bad_path_config.json",
-    "tsc-version": "tsc --version",
-    "tsc-build": "tsc",
-    "app-zip": "zip -r -X GeospatialConditionerService.zip . -x *.git* ./logs/\\*"
+    "app-zip": "zip -r -X GeospatialConditionerService.zip . -x *.git* ./node_modules/\\* ./logs/\\*"
   },
   "repository": {
     "type": "git",
@@ -32,15 +30,9 @@
     "lodash": "^4.17.11",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "ts-node": "^7.0.1",
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "@types/es6-promise": "^3.3.0",
-    "@types/node": "^10.12.18",
-    "nodemon": "^1.18.9",
-    "ts-lint": "^4.5.1",
-    "typescript": "^3.2.2",
     "newman": "^4.3.1"
   }
 }

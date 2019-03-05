@@ -9,14 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const kyber_server_1 = require("kyber-server");
+const common_1 = require("../common");
 class HealthCheckComposer extends kyber_server_1.BaseProcessor {
     fx(args) {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                this.executionContext.raw = Object.assign({}, {
-                    HealthCheck: `OK`,
-                    Message: `No Rest for Old Men`,
-                });
+                if (!this.executionContext.raw.ODS) {
+                    this.executionContext.raw.ODS = {};
+                }
+                if (!this.executionContext.raw.ODS.Processors) {
+                    this.executionContext.raw.ODS.Processors = {};
+                }
+                this.executionContext.raw.ODS.Processors = Object.assign({}, common_1.Utilities.getOdsProcessorJSON('No Rest for Old Men', true));
                 return resolve({
                     successful: true,
                 });

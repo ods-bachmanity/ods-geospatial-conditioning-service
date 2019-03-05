@@ -11,14 +11,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const kyber_server_1 = require("kyber-server");
 const common_1 = require("../../common");
 class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
+    constructor() {
+        super(...arguments);
+        this.className = 'DecimalDegreeConverter';
+    }
     fx(args) {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
+                let errString = '';
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
-                    console.error(`Invalid IGEOLO: ${nitfIGEOLO}`);
+                    errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
+                    console.error(errString);
                     return reject({
-                        message: `Invalid IGEOLO: ${nitfIGEOLO}`,
+                        httpStatus: 400,
+                        message: `${errString}`,
                         successful: false,
                     });
                 }
@@ -39,6 +46,7 @@ class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
                     }
                     else {
                         return reject({
+                            httpStatus: 400,
                             message: `Invalid Latitude Coordinate: ${rawSubLat}`,
                             successful: false,
                         });
@@ -52,6 +60,7 @@ class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
                     }
                     else {
                         return reject({
+                            httpStatus: 400,
                             message: `Invalid Longitude Coordinate: ${rawSubLon}`,
                             successful: false,
                         });
@@ -67,12 +76,28 @@ class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
                     this.executionContext.raw.wkt = common_1.Utilities.toWkt(arrCoords);
                     this.executionContext.raw.coordType = 'D';
                 }
+                errString = '';
+                if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
+                    errString += `\nFormatted wkt is empty in processor ${this.className}`;
+                }
+                if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
+                    errString += `\nFormatted geoJson is empty in processor ${this.className}`;
+                }
+                if (errString.length > 0) {
+                    console.error(errString);
+                    return reject({
+                        httpStatus: 400,
+                        message: `${errString}`,
+                        successful: false,
+                    });
+                }
+                this.executionContext.raw.converter = `${this.className}`;
                 return resolve({
                     successful: true,
                 });
             }
             catch (err) {
-                console.error(`DecimalDegreeConverter: ${err}`);
+                console.error(`${this.className}: ${err}`);
                 return reject({
                     httpStatus: 500,
                     message: `${err}`,

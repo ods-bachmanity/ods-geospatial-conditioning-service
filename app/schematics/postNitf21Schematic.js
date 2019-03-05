@@ -25,7 +25,7 @@ class PostNitf21Schematic extends kyber_server_1.Schematic {
             {
                 name: 'fingerprint',
                 dataType: 'string',
-                required: true,
+                required: false,
                 source: 'req.body.fingerprint',
             },
         ];
@@ -38,17 +38,17 @@ class PostNitf21Schematic extends kyber_server_1.Schematic {
                 processes: [{
                         class: processors_1.Nitf21ICoordsDecisionTree,
                     }],
+                activities: [{
+                        executionMode: kyber_server_1.ExecutionMode.Concurrent,
+                        id: 'PROCESS-COUNTRY-CODES',
+                        ordinal: 1,
+                        processes: [
+                            {
+                                class: processors_1.CountryCodeComposer,
+                            },
+                        ],
+                    }],
             },
-            {
-                executionMode: kyber_server_1.ExecutionMode.Concurrent,
-                id: 'PROCESS-COUNTRY-CODES',
-                ordinal: 1,
-                processes: [
-                    {
-                        class: processors_1.CountryCodeComposer,
-                    },
-                ],
-            }
         ];
         this.responses = [
             {

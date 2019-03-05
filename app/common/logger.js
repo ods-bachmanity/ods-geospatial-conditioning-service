@@ -35,10 +35,7 @@ class Logger {
         this.winstonLogger = winston.createLogger({
             format: myFormat,
             level: 'info',
-            transports: [
-                new winston.transports.File({ filename: this.getDirectory('error'), level: 'error' }),
-                new winston.transports.File({ filename: this.getDirectory('combined') }),
-            ],
+            transports: [],
         });
         if (process.env.NODE_ENV !== 'production') {
             this.winstonLogger.add(new winston.transports.Console({
