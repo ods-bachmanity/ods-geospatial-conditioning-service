@@ -13,7 +13,7 @@
     "bad-path-tests": "newman run tests/geospatial_bad_path.json -d tests/bad_path_config.json",
     "tsc-version": "tsc --version",
     "tsc-build": "tsc",
-    "app-zip": "zip -r -X GeospatialConditionerService.zip . -x *.git* ./node_modules/\\* ./logs/\\*"
+    "app-zip": "zip -r -X GeospatialConditionerService.zip . -x *.git* ./logs/\\*"
   },
   "repository": {
     "type": "git",
