@@ -37,11 +37,9 @@ class Logger {
             level: 'info',
             transports: [],
         });
-        if (process.env.NODE_ENV !== 'production') {
-            this.winstonLogger.add(new winston.transports.Console({
-                format: consoleFormat,
-            }));
-        }
+        this.winstonLogger.add(new winston.transports.Console({
+            format: consoleFormat,
+        }));
     }
     connect(kyber) {
         kyber.events.on(kyber_server_1.KyberServerEvents.ServerStarted, (args) => {
