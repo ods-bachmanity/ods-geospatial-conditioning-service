@@ -3,7 +3,10 @@ import { Logger } from './logger';
 
 export class CoordinateConversionService {
 
-    private servicePath: string = process.env.COORDCONVERSIONSERVICEURL;
+
+    private servicePath: string = process.env.COORDCONVERSIONSERVICE_BASEURL;
+    private healthEndpoint: string = process.env.COORDCONVERSIONSERVICE_HEALTHENDPOINT;
+    private conversionEndpoint: string = process.env.COORDCONVERSIONSERVICE_COUNTRIESENDPOINT;
     private logger: Logger = new Logger();
 
     public constructor(private correlationId: string) {}
@@ -15,7 +18,11 @@ export class CoordinateConversionService {
             try {
                 if (!this.servicePath) {
                     this.logger.error(this.correlationId, `Invalid Service Path for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GET`);
-                    return reject(`Invalid Service Path for Coordinate Conversion Service`);
+                    return reject(`Invalid Service Path for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_BASEURL`);
+                }
+                if (!this.conversionEndpoint) {
+                    this.logger.error(this.correlationId, `Invalid conversion endpoint for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GET`);
+                    return reject({message: `Invalid countries endpoint for Country Code Service, update environment value for COORDCONVERSIONSERVICE_CONVERSIONENDPOINT`});
                 }
 
                 if (!requestBody) {
@@ -37,6 +44,38 @@ export class CoordinateConversionService {
                 return reject(err);
             }
 
+        });
+
+        return result;
+    }
+
+    public getHealth(): Promise<any> {
+        const result: Promise<any> = new Promise(async (resolve, reject) => {
+            try {
+                if (!this.servicePath) {
+                    this.logger.error(this.correlationId, `Invalid Service Path for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GETHEALTH`);
+                    return reject({message: `Invalid Service Path for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_BASEURL`});
+                }
+                if (!this.healthEndpoint) {
+                    this.logger.error(this.correlationId, `Invalid health endpoint for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GETHEALTH`);
+                    return reject({message: `Invalid health endpoint for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_HEALTHENDPOINT`});
+                }
+
+                // DEBUG
+                console.log(this.servicePath + this.healthEndpoint);
+
+                const response = await rp.get({
+                    url: this.servicePath + this.healthEndpoint,
+                });
+
+                const body = JSON.parse(response);
+                body.healthy = true;
+                return resolve(body);
+
+            } catch (err) {
+                this.logger.warn(this.correlationId, `Warning, cannot reach Coordinate Conversion Service: ${err.message}`, `COORDINATECONVERSIONSERVICE.GETHEALTH`);
+                return resolve(err);
+            }
         });
 
         return result;
