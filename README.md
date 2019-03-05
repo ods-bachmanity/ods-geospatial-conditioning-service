@@ -24,6 +24,23 @@ To run development version, from root: `npm start`. This will start the applicat
 #### HEALTH CHECK
 GET `/v2/ods/geospatialconditioning/health` returns the Health Check
 
+##### Response Document Format
+``` JSON
+{
+    "countryCodeService": "[Reachable|Unreachable]",
+    "coordinateConversionService": "[Reachable|Unreachable]",
+    "ODS": {
+        "Processors": {
+            "geospatialConditioner": {
+                "status": "<string>",
+                "timestamp": "<string>",
+                "version": "<string>",
+            }
+        }
+    }
+}
+```
+
 #### NITF 2.1
 POST `/v2/ods/geospatialconditioning/nitf21` with a proper Request body returns EMC update document
 
@@ -48,6 +65,25 @@ POST `/v2/ods/geospatialconditioning/nitf21` with a proper Request body returns 
             "type": "Feature"
         },
         "Countries": []
+    },
+    "ODS": {
+        "Processors": {
+            "geospatialConditioner": {
+                "status": "<string>",
+                "timestamp": "<string>",
+                "version": "<string>",
+            },
+            "<processor_name_1>": {
+                "status": "<string>",
+                "timestamp": "<string>",
+                "version": "<string>",
+            },
+            "<processor_name_n>": {
+                "status": "<string>",
+                "timestamp": "<string>",
+                "version": "<string>",
+            }
+        }
     }
 }
 ```

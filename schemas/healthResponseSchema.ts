@@ -1,19 +1,19 @@
 import { SchemaDef } from 'kyber-server';
 
 export class HealthResponseSchema extends SchemaDef {
-    public id = 'HealthResponseSchema';
-/*     public schema = {
-        Database: {
+    public id: string = 'HealthResponseSchema';
+
+    public schema = {
+        countryCodeService: {
             type: 'string',
         },
-        HealthCheck: {
+        coordinateConversionService: {
             type: 'string',
         },
-        Message: {
-            type: 'string',
+        ODS: {
+            type: 'object' as string,
         },
-        ODS: any,
-    }; */
-    public schema: any = {
     };
+/*     public schema: any = {
+    }; */
 }
