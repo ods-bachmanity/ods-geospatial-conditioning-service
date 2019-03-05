@@ -38,13 +38,18 @@ export class Logger {
     private winstonLogger?: winston.Logger = null;
     constructor() {
 
-        this.winstonLogger = winston.createLogger({
-            format: myFormat,
-            level: 'info',
+        /*
+            Log to local filesystem
             transports: [
               new winston.transports.File({ filename: this.getDirectory('error'), level: 'error' }),
               new winston.transports.File({ filename: this.getDirectory('combined') }),
             ],
+
+        */
+        this.winstonLogger = winston.createLogger({
+            format: myFormat,
+            level: 'info',
+            transports: [],
         });
         //
         // If we're not in production then log to the `console` with the format:
