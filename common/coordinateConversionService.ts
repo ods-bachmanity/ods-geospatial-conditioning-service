@@ -6,7 +6,7 @@ export class CoordinateConversionService {
 
     private servicePath: string = process.env.COORDCONVERSIONSERVICE_BASEURL;
     private healthEndpoint: string = process.env.COORDCONVERSIONSERVICE_HEALTHENDPOINT;
-    private conversionEndpoint: string = process.env.COORDCONVERSIONSERVICE_COUNTRIESENDPOINT;
+    private conversionEndpoint: string = process.env.COORDCONVERSIONSERVICE_CONVERSIONENDPOINT;
     private logger: Logger = new Logger();
 
     public constructor(private correlationId: string) {}
@@ -22,7 +22,7 @@ export class CoordinateConversionService {
                 }
                 if (!this.conversionEndpoint) {
                     this.logger.error(this.correlationId, `Invalid conversion endpoint for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GET`);
-                    return reject({message: `Invalid countries endpoint for Country Code Service, update environment value for COORDCONVERSIONSERVICE_CONVERSIONENDPOINT`});
+                    return reject({message: `Invalid conversion endpoint for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_CONVERSIONENDPOINT`});
                 }
 
                 if (!requestBody) {
@@ -33,7 +33,7 @@ export class CoordinateConversionService {
                 const response = await rp.post({
                     body: JSON.stringify(requestBody),
                     headers: { 'content-type': 'application/json' },
-                    url: this.servicePath,
+                    url: this.servicePath + this.conversionEndpoint,
                 });
 
                 const records = JSON.parse(response);
