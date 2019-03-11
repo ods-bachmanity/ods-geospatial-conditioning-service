@@ -67,6 +67,46 @@ export class Utilities {
 
     }
 
+    public static toMbr(input: Array<DecimalDegreeCoordinateSchema>): string {
+
+        if (!input || input.length <= 0) {
+            return '';
+        }
+
+        // Initialize mins to maxes and maxes to mins.
+        let minLon: string = '180.0';
+        let maxLon: string = '-180.0';
+        let minLat: string = '90.0';
+        let maxLat: string = '-90.0';
+
+        // Open MBR RECTANGLE string.
+        let output = 'RECTANGLE (';
+
+        // Determine min and max longitude and latitude.
+        input.forEach((inputItem: DecimalDegreeCoordinateSchema) => {
+            if (Number(inputItem.Longitude) < Number(minLon)) {
+                minLon = inputItem.Longitude;
+            }
+            if (Number(inputItem.Longitude) > Number(maxLon)) {
+                maxLon = inputItem.Longitude;
+            }
+            if (Number(inputItem.Latitude) < Number(minLat)) {
+                minLat = inputItem.Latitude;
+            }
+            if (Number(inputItem.Latitude) > Number(maxLat)) {
+                maxLat = inputItem.Latitude;
+            }
+        });
+
+        // Fill in Rectangle values.  (Currently set to upper left and bottom right)
+        output += `${minLon} ${maxLat},${maxLon} ${minLat}`;
+
+        // Close MBR Rectangle string.
+        output += ')';
+        return output;
+
+    }
+
     public static comparePoints(pointOne: DecimalDegreeCoordinateSchema, pointTwo: DecimalDegreeCoordinateSchema): boolean {
         let pointsMatch: boolean = false;
 

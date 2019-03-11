@@ -66,6 +66,7 @@ export class UTMSouthCoordsConverter extends BaseProcessor {
                 if (body && body.Coordinates) {
                     this.executionContext.raw.geoJson = Utilities.toGeoJSON(body.Coordinates);
                     this.executionContext.raw.wkt = Utilities.toWkt(body.Coordinates);
+                    this.executionContext.raw.mbr = Utilities.toMbr(body.Coordinates);
                     this.executionContext.raw.coordType = 'S';
 
                     // Grab ODS.Processor return section from CoordinateConversionService
@@ -82,6 +83,9 @@ export class UTMSouthCoordsConverter extends BaseProcessor {
                     }
                     if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
                         errString += `\nFormatted geoJson is empty in processor ${this.className}`;
+                    }
+                    if (!(this.executionContext.raw.mbr) || !((this.executionContext.raw.mbr).length > 0)) {
+                        errString += `\nFormatted mbr is empty in processor ${this.className}`;
                     }
 
                     // Report failure or log formatted wkt string.
