@@ -31,31 +31,31 @@ export class GeographicCoordsConverter extends BaseProcessor {
                 // First 7 bytes make up Latitude portion (DDMMSS[N|S])
                 // Last 8 bytes make up Longitude portion (DDDMMSS[E|W])
                 // Input to coordinate conversion service needs space separator (DD MM SS[N|S]) (DDD MM SS[N|S])
-                const LAT_LENGTH: number = 7
-                const LON_LENGTH: number = 8
-                const COORD_LENGTH: number  = 15
+                const LAT_LENGTH: number = 7;
+                const LON_LENGTH: number = 8;
+                const COORD_LENGTH: number  = 15;
 
                 // Initialize new coordinate conversion request structure to UTM G type.
                 const coordinateConversionRequest = new CoordinateConversionRequestSchema();
                 coordinateConversionRequest.sourceCoordinateType = 10;
 
-                for ( let i = 0; i <= 3; i++ )
-                {   // grab first 15 byte chunk
-                    const coordinate = nitfIGEOLO.substr(i*COORD_LENGTH, COORD_LENGTH);
+                for ( let i = 0; i <= 3; i++ ) {
+                    // grab first 15 byte chunk
+                    const coordinate = nitfIGEOLO.substr(i * COORD_LENGTH, COORD_LENGTH);
                     // grab raw lat
                     const rawSubLat = coordinate.substr(0, LAT_LENGTH);
                     // grab raw long
                     const rawSubLon = coordinate.substr(LAT_LENGTH, LON_LENGTH);
 
                     // format lat
-                    const formattedLat = rawSubLat.substr(0,2) + ' ' + rawSubLat.substr(2,2) + ' ' + rawSubLat.substr(4,3);
+                    const formattedLat = rawSubLat.substr(0, 2) + ' ' + rawSubLat.substr(2, 2) + ' ' + rawSubLat.substr(4, 3);
                     // split long
-                    const formattedLon = rawSubLon.substr(0,3) + ' ' + rawSubLon.substr(3,2) + ' ' + rawSubLon.substr(5,3);
+                    const formattedLon = rawSubLon.substr(0, 3) + ' ' + rawSubLon.substr(3, 2) + ' ' + rawSubLon.substr(5, 3);
                     // Add to sourceCoordinates array.
                     coordinateConversionRequest.sourceCoordinates.push({
                         sourceLongitude: formattedLon,
                         sourceLatitude: formattedLat,
-                        sourceHeight: '0'
+                        sourceHeight: '0',
                     });
                 }
 
@@ -65,12 +65,12 @@ export class GeographicCoordsConverter extends BaseProcessor {
                 if (body && body.Coordinates) {
                     this.executionContext.raw.geoJson = Utilities.toGeoJSON(body.Coordinates);
                     this.executionContext.raw.wkt = Utilities.toWkt(body.Coordinates);
+                    this.executionContext.raw.mbr = Utilities.toMbr(body.Coordinates);
                     this.executionContext.raw.coordType = 'G';
-
                     // Grab ODS.Processor return section from CoordinateConversionService
-                    if (!this.executionContext.raw.ods) { this.executionContext.raw.ods = {}; }
-                    if (!this.executionContext.raw.ods.processors) { this.executionContext.raw.ods.processors  = []; }
-                    if (body.ODS && body.ODS.Processors) { this.executionContext.raw.ods.processors.push(body.ODS.Processors); }
+                    this.executionContext.raw.ODS = this.executionContext.raw.ODS || {};
+                    this.executionContext.raw.ODS.Processors = this.executionContext.raw.ODS.Processors || {};
+                    this.executionContext.raw.ODS.Processors = Object.assign({}, this.executionContext.raw.ODS.Processors, body.ODS.Processors);
 
                     console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
 
@@ -81,6 +81,9 @@ export class GeographicCoordsConverter extends BaseProcessor {
                     }
                     if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
                         errString += `\nFormatted geoJson is empty in processor ${this.className}`;
+                    }
+                    if (!(this.executionContext.raw.mbr) || !((this.executionContext.raw.mbr).length > 0)) {
+                        errString += `\nFormatted mbr is empty in processor ${this.className}`;
                     }
 
                     // Report failure or log formatted wkt string.

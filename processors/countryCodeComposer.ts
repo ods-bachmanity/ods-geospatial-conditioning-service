@@ -1,5 +1,5 @@
 import { BaseProcessor, ProcessorResponse } from 'kyber-server';
-import { CountryCodeService, Logger } from '../common';
+import { CountryCodeService, Logger, Utilities } from '../common';
 
 export class CountryCodeComposer extends BaseProcessor {
 
@@ -18,12 +18,11 @@ export class CountryCodeComposer extends BaseProcessor {
                 this.executionContext.raw.countries = response && response.rows ? response.rows : [];
 
                 // Grab ODS.Processor return section from CountryCodeService
-                if (!this.executionContext.raw.ods) { this.executionContext.raw.ods = {}; }
-                if (!this.executionContext.raw.ods.processors) { this.executionContext.raw.ods.processors  = []; }
-                if (response && response.ODS && response.ODS.Processors) { this.executionContext.raw.ods.processors.push(response.ODS.Processors); }
+                this.executionContext.raw.ODS = this.executionContext.raw.ODS || {};
+                this.executionContext.raw.ODS.Processors = Object.assign({}, this.executionContext.raw.ODS.Processors, response.ODS.Processors);
 
                 // DEBUG
-                console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
+                // console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
                 // DEBUG
 
                 return resolve({
@@ -40,7 +39,6 @@ export class CountryCodeComposer extends BaseProcessor {
         });
 
         return result;
-
     }
 }
 /*

@@ -85,6 +85,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                 if (arrCoords.length > 0) {
                     this.executionContext.raw.geoJson = Utilities.toGeoJSON(arrCoords);
                     this.executionContext.raw.wkt = Utilities.toWkt(arrCoords);
+                    this.executionContext.raw.mbr = Utilities.toMbr(arrCoords);
                     this.executionContext.raw.coordType = 'D';
                 }
 
@@ -95,6 +96,9 @@ export class DecimalDegreeConverter extends BaseProcessor {
                 }
                 if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
                     errString += `\nFormatted geoJson is empty in processor ${this.className}`;
+                }
+                if (!(this.executionContext.raw.mbr) || !((this.executionContext.raw.mbr).length > 0)) {
+                    errString += `\nFormatted mbr is empty in processor ${this.className}`;
                 }
 
                 // Report failure or log formatted wkt string.

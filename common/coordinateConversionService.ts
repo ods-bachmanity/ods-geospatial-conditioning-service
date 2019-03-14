@@ -3,7 +3,6 @@ import { Logger } from './logger';
 
 export class CoordinateConversionService {
 
-
     private servicePath: string = process.env.COORDCONVERSIONSERVICE_BASEURL;
     private healthEndpoint: string = process.env.COORDCONVERSIONSERVICE_HEALTHENDPOINT;
     private conversionEndpoint: string = process.env.COORDCONVERSIONSERVICE_CONVERSIONENDPOINT;
