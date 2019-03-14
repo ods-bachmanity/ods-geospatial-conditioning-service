@@ -90,9 +90,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                     this.executionContext.raw.coordType = 'N';
 
                     // Grab ODS.Processor return section from CoordinateConversionService
-                    if (!this.executionContext.raw.ods) { this.executionContext.raw.ods = {}; }
-                    if (!this.executionContext.raw.ods.processors) { this.executionContext.raw.ods.processors  = []; }
-                    if (body.ODS && body.ODS.Processors) { this.executionContext.raw.ods.processors.push(body.ODS.Processors); }
+                    this.executionContext.raw.ODS = Utilities.setODSObject(this.executionContext.raw.ODS || {}, body || {});
 
                     console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.ods, null, 1)}\n\n`);
 

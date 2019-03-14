@@ -117,30 +117,23 @@ export class Utilities {
         return pointsMatch;
     }
 
-    public static getOdsProcessorJSON(status: string, addLastUpdated: boolean): any {
-        const date = new Date();
-        let timestamp = date.toISOString();
-        timestamp = timestamp.replace('Z', '+00:00');
+    public static getOdsProcessorJSON(status?: string): any {
+        const packageJson = require('../package.json');
+        const timestamp = new Date().toISOString().replace('Z', '+00:00');
 
-        // Grab the service name, version and last updated times from the environment (package.json), load defaults if unavailable.
-        const serviceName: string = process.env.npm_package_servicename ? process.env.npm_package_servicename : 'GCS default';
-        const serviceVersion: string = process.env.npm_package_version ? process.env.npm_package_version : 'default version';
-        const serviceLastUpdated: string = process.env.npm_package_lastupdated ? process.env.npm_package_lastupdated : '1970-01-01T00:00:00.000+00:00';
-
-        const jsonReturn = {};
-
-        // Generate ODS.Processor inital return structure.
-        jsonReturn[serviceName] = {
-            status: `${status}`,
-            timestamp: `${timestamp}`,
-            version: `${serviceVersion}`,
+        return {
+            geospatialConditioner: {
+                status: status || 'success',
+                timestamp,
+                version: packageJson.version || 'Unknown',
+            },
         };
+    }
 
-        // If requested, add last updated field to ODS.Processor.<servicename> return structure.
-        if (addLastUpdated) {
-            jsonReturn[serviceName].lastUpdated = serviceLastUpdated;
-        }
-
-        return jsonReturn;
+    public static setODSObject(ODS: any, body: any): any {
+        const OdsReturnObject: any = ODS || {};
+        OdsReturnObject.Processors = ODS.Processors || [];
+        if (body.ODS && body.ODS.Processors) { OdsReturnObject.Processors.push(body.ODS.Processors); }
+        return OdsReturnObject;
     }
 }

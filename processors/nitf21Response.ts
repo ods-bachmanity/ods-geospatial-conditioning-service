@@ -17,35 +17,9 @@ export class Nitf21Response extends BaseProcessor {
             output.GEO.CountryCodes = countryOutput;
 
             // Add ODS.Processor.<servicename> return JSON to the processors array in raw.
-            if (!this.executionContext.raw.ods) { this.executionContext.raw.ods = {}; }
-            if (!this.executionContext.raw.ods.processors) { this.executionContext.raw.ods.processors  = []; }
-            this.executionContext.raw.ods.processors.push(Utilities.getOdsProcessorJSON('success', false));
-
-            // Iterate over all processors store in the array, and add them to the ODS.Processors JSON structure that EMC expects back.
-            //
-            // Example structure:
-            // ODS {
-            //     Processors{
-            //         <service_name> {
-            //             status: "string",
-            //             timestamp: "string",
-            //             version: "string"
-            //         }
-            //     }
-            // }
-            //
-            output.ODS = {};
-            output.ODS.Processors = {};
-            this.executionContext.raw.ods.processors.forEach((item) => {
-                const keynames = Object.keys(item);
-                keynames.forEach((keyname) => {
-                    output.ODS.Processors[keyname] = item[keyname];
-                });
-            });
-
-            // DEBUG;
-            // console.log(`\n\n${JSON.stringify(output.ODS, null, 1)}\n\n`);
-            // DEBUG
+            output.ODS = this.executionContext.raw.ODS || {};
+            output.ODS.Processors = this.executionContext.raw.ODS.Processors || [];
+            output.ODS.Processors.push(Utilities.getOdsProcessorJSON());
 
             resolve({
                 data: {GEO: output.GEO, ODS: output.ODS},
