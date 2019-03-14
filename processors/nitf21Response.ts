@@ -18,8 +18,7 @@ export class Nitf21Response extends BaseProcessor {
 
             // Add ODS.Processor.<servicename> return JSON to the processors array in raw.
             output.ODS = this.executionContext.raw.ODS || {};
-            output.ODS.Processors = this.executionContext.raw.ODS.Processors || [];
-            output.ODS.Processors.push(Utilities.getOdsProcessorJSON());
+            output.ODS.Processors = Object.assign({}, this.executionContext.raw.ODS.Processors, Utilities.getOdsProcessorJSON());
 
             resolve({
                 data: {GEO: output.GEO, ODS: output.ODS},

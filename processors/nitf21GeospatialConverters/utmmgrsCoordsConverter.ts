@@ -52,7 +52,10 @@ export class UTMMGRSCoordsConverter extends BaseProcessor {
                     this.executionContext.raw.coordType = 'U';
 
                     // Grab ODS.Processor return section from CoordinateConversionService
-                    this.executionContext.raw.ODS = Utilities.setODSObject(this.executionContext.raw.ODS || {}, body || {});
+                    this.executionContext.raw.ODS = this.executionContext.raw.ODS || {};
+                    this.executionContext.raw.ODS.Processors = this.executionContext.raw.ODS.Processors || {};
+                    this.executionContext.raw.ODS.Processors = Object.assign({}, this.executionContext.raw.ODS.Processors, body.ODS.Processors);
+
                     console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
 
                     // Check if formatting to geoJson and wkt was successful.
@@ -103,6 +106,5 @@ export class UTMMGRSCoordsConverter extends BaseProcessor {
         });
 
         return result;
-
     }
 }

@@ -129,11 +129,4 @@ export class Utilities {
             },
         };
     }
-
-    public static setODSObject(ODS: any, body: any): any {
-        const OdsReturnObject: any = ODS || {};
-        OdsReturnObject.Processors = ODS.Processors || [];
-        if (body.ODS && body.ODS.Processors) { OdsReturnObject.Processors.push(body.ODS.Processors); }
-        return OdsReturnObject;
-    }
 }

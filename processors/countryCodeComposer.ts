@@ -18,10 +18,11 @@ export class CountryCodeComposer extends BaseProcessor {
                 this.executionContext.raw.countries = response && response.rows ? response.rows : [];
 
                 // Grab ODS.Processor return section from CountryCodeService
-                this.executionContext.raw.ODS = Utilities.setODSObject(this.executionContext.raw.ODS || {}, response || {});
+                this.executionContext.raw.ODS = this.executionContext.raw.ODS || {};
+                this.executionContext.raw.ODS.Processors = Object.assign({}, this.executionContext.raw.ODS.Processors, response.ODS.Processors);
 
                 // DEBUG
-                console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
+                // console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
                 // DEBUG
 
                 return resolve({
