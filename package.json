@@ -8,8 +8,8 @@
     "start": "nodemon -r ts-node/register index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "newman-version" : "newman -v",
-    "happy-path-tests": "newman run tests/geospatial_happy_path.json -d tests/happy_path_config.json",
-    "bad-path-tests": "newman run tests/geospatial_bad_path.json -d tests/bad_path_config.json",
+    "happy-path-tests": "newman run tests/GCS_happy_path_test.json -d tests/GCS_happy_path_config.json",
+    "bad-path-tests": "newman run tests/GCS_bad_path_test.json -d tests/GCS_bad_path_config.json",
     "tsc-version": "tsc --version",
     "tsc-build": "tsc",
     "app-zip": "zip -r -X GeospatialConditionerService.zip . -x *.git* ./logs/\\*"

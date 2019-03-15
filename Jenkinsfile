@@ -27,6 +27,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
+								sh 'npm run happy-path-tests'
+								sh 'npm run bad-path-tests'
             }
         }
         stage('Deploy-Feature') {

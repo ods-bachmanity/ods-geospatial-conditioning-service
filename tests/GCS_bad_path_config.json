@@ -1,6 +1,6 @@
 [
     {
-        "host": "bachmanity-geospatialservice-627311493.us-east-1.elb.amazonaws.com",
+        "host": "BACHMANITY-GCS-1125049590.us-east-1.elb.amazonaws.com",
         "testData": [
             {
                 "testName": "health check",
