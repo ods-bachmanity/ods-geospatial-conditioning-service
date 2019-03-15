@@ -100,7 +100,7 @@ Bad JSON Syntax
 # Execution Commands
 
 Happy Path Tests:
-newman run GSC_happy_path_test.json -d GSC_happy_path_config.json
+newman run GCS_happy_path_test.json -d GCS_happy_path_config.json
 
 Bad Path Tests:
-newman run GSC_bad_path_test.json -d GSC_bad_path_config.json
+newman run GCS_bad_path_test.json -d GCS_bad_path_config.json
