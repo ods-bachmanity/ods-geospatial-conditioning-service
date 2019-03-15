@@ -1,0 +1,450 @@
+{
+    "info": {
+        "_postman_id": "bc368c3a-36c9-4a6c-8f75-ca0184f3e81c",
+        "name": "geospatialconditioning",
+        "schema": "http://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "testNumber",
+            "value": 0,
+            "type": "int"
+        },
+        {
+            "key": "requestBody",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "testNumber = pm.variables.get(\"testNumber\");",
+                    "let testData = pm.iterationData.get(\"testData\")",
+                    "let requestBody = JSON.stringify(testData[testNumber].requestBody)",
+                    "++testNumber",
+                    "pm.variables.set(\"testNumber\",testNumber);",
+                    "pm.variables.set(\"requestBody\",requestBody);"
+                ]
+            }
+        }
+    ],
+    "item": [
+        {
+            "name": "404 Error: Unknown Endpoint",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "d85d4268-90f6-4af1-8e7a-c479a4792e16",
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 404\",function () {",
+                            "      pm.response.to.have.status(404);",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "url": "http://{{host}}/v2/ods/geospatialconditioning/fuzzy",
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {},
+                "description": "This request returns a successful response and performs assertions on expected content values"
+            },
+            "response": []
+        },
+        {
+            "name": "400 Error:Missing ICORDS Parameter",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "374a88cb-c020-45cc-951d-5ad204a0becc",
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 400\",function () {",
+                            "      pm.response.to.have.status(400);",
+                            "});",
+                            "",
+                            "pm.test(\"Expected Response\",function () {",
+                            " errorResponse = pm.response.json()",
+                            " testData = pm.iterationData.get(\"testData\")",
+                            " console.log(testData[testNumber-1].testName)",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
+                            "});",
+                            ""
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{{requestBody}}"
+                },
+                "url": {
+                    "raw": "http://{{host}}/v2/ods/geospatialconditioning",
+                    "protocol": "http",
+                    "host": [
+                        "{{host}}"
+                    ],
+                    "path": [
+                        "v2",
+                        "ods",
+                        "geospatialconditioning",
+                        "nitf21"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "400 Error: Missing IGEOLO Parameter",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "8b6fbcdb-534e-47af-b625-d086fb05d399",
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 400\",function () {",
+                            "      pm.response.to.have.status(400);",
+                            "});",
+                            "",
+                            "pm.test(\"Expected Response\",function () {",
+                            " errorResponse = pm.response.json()",
+                            " testData = pm.iterationData.get(\"testData\")",
+                            " console.log(testData[testNumber-1].testName)",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
+                            "});",
+                            ""
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{{requestBody}}"
+                },
+                "url": {
+                    "raw": "http://{{host}}/v2/ods/geospatialconditioning",
+                    "protocol": "http",
+                    "host": [
+                        "{{host}}"
+                    ],
+                    "path": [
+                        "v2",
+                        "ods",
+                        "geospatialconditioning",
+                        "nitf21"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "400 Error: Invalid IGEOLO Parameter",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "7430644a-8bd7-444e-8181-8f1ea437c3ac",
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 400\",function () {",
+                            "      pm.response.to.have.status(400);",
+                            "});",
+                            "",
+                            "pm.test(\"Expected Response\",function () {",
+                            " errorResponse = pm.response.json()",
+                            " testData = pm.iterationData.get(\"testData\")",
+                            " console.log(testData[testNumber-1].testName)",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
+                            "});",
+                            ""
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{{requestBody}}"
+                },
+                "url": {
+                    "raw": "http://{{host}}/v2/ods/geospatialconditioning",
+                    "protocol": "http",
+                    "host": [
+                        "{{host}}"
+                    ],
+                    "path": [
+                        "v2",
+                        "ods",
+                        "geospatialconditioning",
+                        "nitf21"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "400 Error: Invalid ICORDS Parameter",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "f49c96a0-6e24-44f8-8d8e-b3786527466e",
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 400\",function () {",
+                            "      pm.response.to.have.status(400);",
+                            "});",
+                            "pm.test(\"Expected Response\",function () {",
+                            " errorResponse = pm.response.json()",
+                            " testData = pm.iterationData.get(\"testData\")",
+                            " console.log(testData[testNumber-1].testName)",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{{requestBody}}"
+                },
+                "url": {
+                    "raw": "http://{{host}}/v2/ods/geospatialconditioning",
+                    "protocol": "http",
+                    "host": [
+                        "{{host}}"
+                    ],
+                    "path": [
+                        "v2",
+                        "ods",
+                        "geospatialconditioning",
+                        "nitf21"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "400 Error: Empty JSON Body",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "f5485f4f-4960-4bf2-9f1c-419a11a727bc",
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 400\",function () {",
+                            "      pm.response.to.have.status(400);",
+                            "});",
+                            "pm.test(\"Expected Response\",function () {",
+                            " errorResponse = pm.response.json()",
+                            " testData = pm.iterationData.get(\"testData\")",
+                            " console.log(testData[testNumber-1].testName)",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{{requestBody}}"
+                },
+                "url": {
+                    "raw": "http://{{host}}/v2/ods/geospatialconditioning",
+                    "protocol": "http",
+                    "host": [
+                        "{{host}}"
+                    ],
+                    "path": [
+                        "v2",
+                        "ods",
+                        "geospatialconditioning",
+                        "nitf21"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "404 Error: Invalid Path - GET /v2/ods/geospatialconditionin",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "da2ff9da-bc49-46a1-a978-d864a4fd2a6b",
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 404\",function () {",
+                            "      pm.response.to.have.status(404);",
+                            "});",
+                            "pm.test(\"Expected Response\",function () {",
+                            " errorResponse = pm.response.json()",
+                            " testData = pm.iterationData.get(\"testData\")",
+                            " console.log(testData[testNumber-1].testName)",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{{requestBody}}"
+                },
+                "url": {
+                    "raw": "http://{{host}}/v2/ods/geospatialconditionin",
+                    "protocol": "http",
+                    "host": [
+                        "{{host}}"
+                    ],
+                    "path": [
+                        "v2",
+                        "ods",
+                        "geospatialconditionin"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "500 Error: Bad JSON Syntax",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "abe422a2-2de9-437c-b3e5-8460437709b0",
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 500\",function () {",
+                            "      pm.response.to.have.status(500);",
+                            "});",
+                            "pm.test(\"Expected Response\",function () {",
+                            " errorResponse = pm.response.json()",
+                            " testData = pm.iterationData.get(\"testData\")",
+                            " console.log(testData[testNumber-1].testName)",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{{requestBody}}"
+                },
+                "url": {
+                    "raw": "http://{{host}}/v2/ods/geospatialconditioning/nitf21",
+                    "protocol": "http",
+                    "host": [
+                        "{{host}}"
+                    ],
+                    "path": [
+                        "v2",
+                        "ods",
+                        "geospatialconditioning",
+                        "nitf21"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}
