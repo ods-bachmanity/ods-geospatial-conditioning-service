@@ -23,9 +23,9 @@ export class HealthCheckComposer extends BaseProcessor {
                 this.executionContext.raw.coordinateConversionService = coordResponse && coordResponse.healthy ? 'Reachable' : 'Unreachable';
 
                 // Add ODS.Processors return structure to health check.
-                if (!this.executionContext.raw.ODS) { this.executionContext.raw.ODS = {}; }
-                if (!this.executionContext.raw.ODS.Processors) { this.executionContext.raw.ODS.Processors  = {}; }
-                this.executionContext.raw.ODS.Processors = Object.assign({}, Utilities.getOdsProcessorJSON('No Rest for Old Men', true));
+                this.executionContext.raw.ODS = this.executionContext.raw.ODS || {};
+                this.executionContext.raw.ODS.Processors = this.executionContext.raw.ODS.Processors || {};
+                this.executionContext.raw.ODS.Processors = Object.assign({}, Utilities.getOdsProcessorJSON());
                 return resolve({
                     successful: true,
                 });

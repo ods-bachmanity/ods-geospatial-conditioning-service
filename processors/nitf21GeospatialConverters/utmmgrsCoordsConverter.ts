@@ -48,12 +48,13 @@ export class UTMMGRSCoordsConverter extends BaseProcessor {
                 if (body && body.Coordinates) {
                     this.executionContext.raw.geoJson = Utilities.toGeoJSON(body.Coordinates);
                     this.executionContext.raw.wkt = Utilities.toWkt(body.Coordinates);
+                    this.executionContext.raw.mbr = Utilities.toMbr(body.Coordinates);
                     this.executionContext.raw.coordType = 'U';
 
                     // Grab ODS.Processor return section from CoordinateConversionService
-                    if (!this.executionContext.raw.ods) { this.executionContext.raw.ods = {}; }
-                    if (!this.executionContext.raw.ods.processors) { this.executionContext.raw.ods.processors  = []; }
-                    if (body.ODS && body.ODS.Processors) { this.executionContext.raw.ods.processors.push(body.ODS.Processors); }
+                    this.executionContext.raw.ODS = this.executionContext.raw.ODS || {};
+                    this.executionContext.raw.ODS.Processors = this.executionContext.raw.ODS.Processors || {};
+                    this.executionContext.raw.ODS.Processors = Object.assign({}, this.executionContext.raw.ODS.Processors, body.ODS.Processors);
 
                     console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
 
@@ -64,6 +65,9 @@ export class UTMMGRSCoordsConverter extends BaseProcessor {
                     }
                     if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
                         errString += `\nFormatted geoJson is empty in processor ${this.className}`;
+                    }
+                    if (!(this.executionContext.raw.mbr) || !((this.executionContext.raw.mbr).length > 0)) {
+                        errString += `\nFormatted mbr is empty in processor ${this.className}`;
                     }
 
                     // Report failure or log formatted wkt string.
@@ -102,6 +106,5 @@ export class UTMMGRSCoordsConverter extends BaseProcessor {
         });
 
         return result;
-
     }
 }
