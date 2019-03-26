@@ -64,6 +64,7 @@ POST `/v2/ods/geospatialconditioning/nitf21` with a proper Request body returns 
             "properties": {},
             "type": "Feature"
         },
+        "MBR": "<string>",
         "Countries": ["ABC", "DEF"]
     },
     "ODS": {
