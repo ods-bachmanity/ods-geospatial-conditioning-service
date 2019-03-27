@@ -98,8 +98,8 @@ export class Utilities {
             }
         });
 
-        // Fill in Rectangle values.  (Currently set to upper left and bottom right)
-        output += `${minLon} ${maxLat},${maxLon} ${minLat}`;
+        // Fill in Rectangle values.  (Should be WGS84 Decimal Degree coordinate pairs for lower left and upper right of MBR [minLon minLat, maxLon maxLat])
+        output += `${minLon} ${minLat},${maxLon} ${maxLat}`;
 
         // Close MBR Rectangle string.
         output += ')';

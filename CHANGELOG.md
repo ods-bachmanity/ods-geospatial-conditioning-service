@@ -1,3 +1,7 @@
+## v2.1.0 (March 25, 2019)
+
+* #39840 - Updated GCS toMBR Rectangle return format to match provided example, added MBR to JSON return structure in README.md
+
 ## v2.0.13 (March 22, 2019)
 
 * #33517 - Created Readme.MD for Geospatial Conditioning Service
@@ -20,3 +24,4 @@
 * #36001 - Created processor for translating footprint in DD format into GeoJSON format.
 * #36002 - Created processor for translating footprint in DD format into WKT format.
 * #35332 - Create Scaffold for new Geospatial Service following CCS example
+
