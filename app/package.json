@@ -1,7 +1,7 @@
 {
   "name": "ods-geospatial-conversion-service",
   "servicename": "geospatialConditioner",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Convert IGEOLO for ICORDS D, G, N, S or U into DD coordinates",
   "main": "index.js",
   "scripts": {

@@ -1,6 +1,7 @@
 import { BaseProcessor, ProcessorResponse } from 'kyber-server';
 import { CoordinateConversionRequestSchema } from '../../schemas';
 import { CoordinateConversionService, Utilities } from '../../common';
+import { Nitf21ConverterHelper } from './nitf21ConverterHelper';
 
 export class UTMMGRSCoordsConverter extends BaseProcessor {
 
@@ -42,43 +43,35 @@ export class UTMMGRSCoordsConverter extends BaseProcessor {
                     });
                 }
 
+                // Make call to Coordinate Conversion service to get results back in WGS84 Decimal Degrees
                 const coordinateConversionService = new CoordinateConversionService(this.executionContext.correlationId);
                 const body = await coordinateConversionService.get(coordinateConversionRequest);
 
                 if (body && body.Coordinates) {
-                    this.executionContext.raw.geoJson = Utilities.toGeoJSON(body.Coordinates);
-                    this.executionContext.raw.wkt = Utilities.toWkt(body.Coordinates);
-                    this.executionContext.raw.mbr = Utilities.toMbr(body.Coordinates);
-                    this.executionContext.raw.coordType = 'U';
+
+                    const nitf21Helper = new Nitf21ConverterHelper(this.executionContext, this.processorDef);
+
+                    // Pass the decimal degree coordinates to be converted and stored into geoJson, mbr and wkt formats.
+                    nitf21Helper.populateCoordResults(body.Coordinates, 'U');
 
                     // Grab ODS.Processor return section from CoordinateConversionService
-                    this.executionContext.raw.ODS = this.executionContext.raw.ODS || {};
-                    this.executionContext.raw.ODS.Processors = this.executionContext.raw.ODS.Processors || {};
-                    this.executionContext.raw.ODS.Processors = Object.assign({}, this.executionContext.raw.ODS.Processors, body.ODS.Processors);
+                    if (body.ODS && body.ODS.Processors) {
+                        nitf21Helper.populateProcResults(body.ODS.Processors);
+                    }
 
-                    console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
-
-                    // Check if formatting to geoJson and wkt was successful.
-                    errString = '';
-                    if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
-                        errString += `\nFormatted wkt is empty in processor ${this.className}`;
-                    }
-                    if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
-                        errString += `\nFormatted geoJson is empty in processor ${this.className}`;
-                    }
-                    if (!(this.executionContext.raw.mbr) || !((this.executionContext.raw.mbr).length > 0)) {
-                        errString += `\nFormatted mbr is empty in processor ${this.className}`;
-                    }
+                    // Check if formatting to geoJson, mbr, and wkt was successful.
+                    const validationResult = nitf21Helper.getValidationResult(this.className);
 
                     // Report failure or log formatted wkt string.
-                    if (errString.length > 0) {
-                        console.error(errString);
+                    if (validationResult.errors) {
+                        console.error(validationResult.errString);
                         return reject({
                             httpStatus: 400,
-                            message: `${errString}`,
+                            message: `${validationResult.errString}`,
                             successful: false,
                         });
                     } else {
+                        // TODO, update to use logger debug
                         console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
                     }
                 } else {
