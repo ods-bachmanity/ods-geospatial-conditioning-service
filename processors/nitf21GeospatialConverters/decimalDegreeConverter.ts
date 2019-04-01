@@ -1,6 +1,7 @@
 import { BaseProcessor, ProcessorResponse } from 'kyber-server';
 import { Utilities } from '../../common';
 import { DecimalDegreeCoordinateSchema } from '../../schemas';
+import { Nitf21ConverterHelper } from './nitf21ConverterHelper';
 
 export class DecimalDegreeConverter extends BaseProcessor {
 
@@ -83,26 +84,28 @@ export class DecimalDegreeConverter extends BaseProcessor {
                 }
 
                 if (arrCoords.length > 0) {
-                    this.executionContext.raw.geoJson = Utilities.toGeoJSON(arrCoords);
-                    this.executionContext.raw.wkt = Utilities.toWkt(arrCoords);
-                    this.executionContext.raw.mbr = Utilities.toMbr(arrCoords);
-                    this.executionContext.raw.coordType = 'D';
-                }
+                    const nitf21Helper = new Nitf21ConverterHelper(this.executionContext, this.processorDef);
 
-                // Check if formatting to geoJson and wkt was successful.
-                errString = '';
-                if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
-                    errString += `\nFormatted wkt is empty in processor ${this.className}`;
-                }
-                if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
-                    errString += `\nFormatted geoJson is empty in processor ${this.className}`;
-                }
-                if (!(this.executionContext.raw.mbr) || !((this.executionContext.raw.mbr).length > 0)) {
-                    errString += `\nFormatted mbr is empty in processor ${this.className}`;
-                }
+                    // Pass the decimal degree coordinates to be converted and stored into geoJson, mbr, and wkt formats.
+                    nitf21Helper.populateCoordResults(arrCoords, 'D');
 
-                // Report failure or log formatted wkt string.
-                if (errString.length > 0) {
+                    // Check if formatting to geoJson, mbr, and wkt was successful.
+                    const validationResult = nitf21Helper.getValidationResult(this.className);
+
+                    // Report failure or log formatted wkt string.
+                    if (validationResult.errors) {
+                        console.error(validationResult.errString);
+                        return reject({
+                            httpStatus: 400,
+                            message: `${validationResult.errString}`,
+                            successful: false,
+                        });
+                    } else {
+                        // TODO, update to use logger debug
+                        console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
+                    }
+                } else {
+                    errString = `Failed to create coordinate array in ${this.className}`;
                     console.error(errString);
                     return reject({
                         httpStatus: 400,

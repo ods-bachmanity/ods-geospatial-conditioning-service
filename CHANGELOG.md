@@ -1,3 +1,7 @@
+## v2.1.1 (March 29, 2019)
+
+* #39629 - Refactored nitf 2.1 converters code to use common functions for collecting information return from Coordinate Conversion and populate return structures.
+
 ## v2.1.0 (March 25, 2019)
 
 * #39840 - Updated GCS toMBR Rectangle return format to match provided example, added MBR to JSON return structure in README.md
