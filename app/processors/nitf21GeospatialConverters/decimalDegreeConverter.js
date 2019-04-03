@@ -8,26 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const kyber_server_1 = require("kyber-server");
-const common_1 = require("../../common");
-class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
+const syber_server_1 = require("syber-server");
+const nitf21ConverterHelper_1 = require("./nitf21ConverterHelper");
+class DecimalDegreeConverter extends syber_server_1.BaseProcessor {
     constructor() {
         super(...arguments);
         this.className = 'DecimalDegreeConverter';
     }
-    fx(args) {
+    fx() {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
                 let errString = '';
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
                     errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
-                    console.error(errString);
-                    return reject({
-                        httpStatus: 400,
-                        message: `${errString}`,
-                        successful: false,
-                    });
+                    return reject(this.handleError({ message: errString }, `decimalDegreeConverter.fx`, 400));
                 }
                 const LAT_LENGTH = 7;
                 const LON_LENGTH = 8;
@@ -45,11 +40,7 @@ class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
                         formattedLat = rawSubLat.substr(0, LAT_LENGTH);
                     }
                     else {
-                        return reject({
-                            httpStatus: 400,
-                            message: `Invalid Latitude Coordinate: ${rawSubLat}`,
-                            successful: false,
-                        });
+                        return reject(this.handleError({ message: `Invalid Latitude Coordinate: ${rawSubLat}` }, `decimalDegreeConverter.fx`, 400));
                     }
                     let formattedLon = '';
                     if (rawSubLon[0] === '+') {
@@ -59,11 +50,7 @@ class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
                         formattedLon = rawSubLon.substr(0, LON_LENGTH);
                     }
                     else {
-                        return reject({
-                            httpStatus: 400,
-                            message: `Invalid Longitude Coordinate: ${rawSubLon}`,
-                            successful: false,
-                        });
+                        return reject(this.handleError({ message: `Invalid Longitude Coordinate: ${rawSubLon}` }, `decimalDegreeConverter.fx`, 400));
                     }
                     arrCoords.push({
                         Height: '0',
@@ -72,37 +59,24 @@ class DecimalDegreeConverter extends kyber_server_1.BaseProcessor {
                     });
                 }
                 if (arrCoords.length > 0) {
-                    this.executionContext.raw.geoJson = common_1.Utilities.toGeoJSON(arrCoords);
-                    this.executionContext.raw.wkt = common_1.Utilities.toWkt(arrCoords);
-                    this.executionContext.raw.coordType = 'D';
+                    const nitf21Helper = new nitf21ConverterHelper_1.Nitf21ConverterHelper(this.executionContext, this.processorDef, this.logger);
+                    nitf21Helper.populateCoordResults(arrCoords, 'D');
+                    const validationResult = nitf21Helper.getValidationResult(this.className);
+                    if (validationResult.errors) {
+                        return reject(this.handleError({ message: validationResult.errString }, `decimalDegreeConverter.fx`, 400));
+                    }
                 }
-                errString = '';
-                if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
-                    errString += `\nFormatted wkt is empty in processor ${this.className}`;
+                else {
+                    errString = `Failed to create coordinate array in ${this.className}`;
+                    return reject(this.handleError({ message: errString }, `decimalDegreeConverter`, 400));
                 }
-                if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
-                    errString += `\nFormatted geoJson is empty in processor ${this.className}`;
-                }
-                if (errString.length > 0) {
-                    console.error(errString);
-                    return reject({
-                        httpStatus: 400,
-                        message: `${errString}`,
-                        successful: false,
-                    });
-                }
-                this.executionContext.raw.converter = `${this.className}`;
+                this.executionContext.document.converter = `${this.className}`;
                 return resolve({
                     successful: true,
                 });
             }
             catch (err) {
-                console.error(`${this.className}: ${err}`);
-                return reject({
-                    httpStatus: 500,
-                    message: `${err}`,
-                    successful: false,
-                });
+                return reject(this.handleError(err, `decimalDegreeConverter.fx`, 500));
             }
         }));
         return result;

@@ -1,4 +1,4 @@
-import { BaseProcessor, ProcessorResponse } from 'kyber-server';
+import { BaseProcessor, ProcessorResponse, ProcessorErrorResponse } from 'syber-server';
 import { CoordinateConversionRequestSchema, UTMSourceCoordinateSchema } from '../../schemas';
 import { CoordinateConversionService, Utilities } from '../../common';
 import { Nitf21ConverterHelper } from './nitf21ConverterHelper';
@@ -7,9 +7,9 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
 
     public className: string = 'UTMNorthCoordsConverter';
 
-    public fx(args: any): Promise<ProcessorResponse> {
+    public fx(): Promise<ProcessorResponse|ProcessorErrorResponse> {
 
-        const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
+        const result: Promise<ProcessorResponse|ProcessorErrorResponse> = new Promise(async (resolve, reject) => {
 
             try {
                 let errString: string = '';
@@ -18,12 +18,7 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
                     errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
-                    console.error(errString);
-                    return reject({
-                        httpStatus: 400,
-                        message: `${errString}`,
-                        successful: false,
-                    });
+                    return reject(this.handleError({message: errString}, `utmNorthCoordsConverter.fx`, 400));
                 }
 
                 // # Put IGEOLO string into format for loading into object.
@@ -82,12 +77,12 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
                 coordinateConversionRequest.sourceCoordinates = coords;
 
                 // Make call to Coordinate Conversion service to get results back in WGS84 Decimal Degrees
-                const coordinateConversionService = new CoordinateConversionService(this.executionContext.correlationId);
+                const coordinateConversionService = new CoordinateConversionService(this.executionContext.correlationId, this.logger);
                 const body = await coordinateConversionService.get(coordinateConversionRequest);
 
                 if (body && body.Coordinates) {
 
-                    const nitf21Helper = new Nitf21ConverterHelper(this.executionContext, this.processorDef);
+                    const nitf21Helper = new Nitf21ConverterHelper(this.executionContext, this.processorDef, this.logger);
 
                     // Pass the decimal degree coordinates to be converted and stored into geoJson, mbr and wkt formats.
                     nitf21Helper.populateCoordResults(body.Coordinates, 'N');
@@ -102,37 +97,19 @@ export class UTMNorthCoordsConverter extends BaseProcessor {
 
                     // Report failure or log formatted wkt string.
                     if (validationResult.errors) {
-                        console.error(validationResult.errString);
-                        return reject({
-                            httpStatus: 400,
-                            message: `${validationResult.errString}`,
-                            successful: false,
-                        });
-                    } else {
-                        // TODO, update to use logger debug
-                        console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
+                        return reject(this.handleError({message: validationResult.errString}, `utmNotrhCoordsConverter.fx`, 400));
                     }
                 } else {
                     errString = `Missing return from Coordinate Conversion Service in ${this.className}`;
-                    console.error(errString);
-                    return reject({
-                        httpStatus: 400,
-                        message: `${errString}`,
-                        successful: false,
-                    });
+                    return reject(this.handleError({message: errString}, `utmNorthCoordsConverter.fx`, 400));
                 }
 
-                this.executionContext.raw.converter = `${this.className}`;
+                this.executionContext.document.converter = `${this.className}`;
                 return resolve({
                     successful: true,
                 });
             } catch (err) {
-                console.error(`${this.className}: ${err}`);
-                return reject({
-                    httpStatus: 500,
-                    message: `${err}`,
-                    successful: false,
-                });
+                return reject(this.handleError(err, `utmNorthCoordsConverter.fx`, 500));
             }
         });
 

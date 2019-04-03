@@ -1,4 +1,4 @@
-import { SchemaDef } from 'kyber-server';
+import { SchemaDef } from 'syber-server';
 
 export class ErrorResponseSchema extends SchemaDef {
     public id = 'ErrorResponseSchema';

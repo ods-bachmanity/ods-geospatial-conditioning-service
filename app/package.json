@@ -1,7 +1,7 @@
 {
   "name": "ods-geospatial-conversion-service",
   "servicename": "geospatialConditioner",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Convert IGEOLO for ICORDS D, G, N, S or U into DD coordinates",
   "main": "index.js",
   "scripts": {
@@ -14,18 +14,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thepepto/ods-geospatial-conversion-service.git"
+    "url": "git+https://github.com/ods-bachmanity/ods-geospatial-conditioning-service"
   },
   "author": "Steven Sederburg <stevens@blackspoke.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thepepto/ods-geospatial-conversion-service/issues"
+    "url": "https://github.com/ods-bachmanity/ods-geospatial-conditioning-service/issues"
   },
-  "homepage": "https://github.com/thepepto/ods-geospatial-conversion-service#readme",
+  "homepage": "https://github.com/ods-bachmanity/ods-geospatial-conditioning-service#readme",
   "dependencies": {
     "config": "^3.0.1",
     "dotenv": "^6.2.0",
-    "kyber-server": "0.0.12",
+    "syber-server": "0.1.7",
     "lodash": "^4.17.11",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",

@@ -1,11 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const kyber_server_1 = require("kyber-server");
-class HealthResponseSchema extends kyber_server_1.SchemaDef {
+const syber_server_1 = require("syber-server");
+class HealthResponseSchema extends syber_server_1.SchemaDef {
     constructor() {
         super(...arguments);
         this.id = 'HealthResponseSchema';
-        this.schema = {};
+        this.schema = {
+            countryCodeService: {
+                type: 'string',
+            },
+            coordinateConversionService: {
+                type: 'string',
+            },
+            ODS: {
+                type: 'object',
+            },
+        };
     }
 }
 exports.HealthResponseSchema = HealthResponseSchema;

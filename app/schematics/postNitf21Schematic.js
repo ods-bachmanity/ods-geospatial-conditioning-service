@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const kyber_server_1 = require("kyber-server");
+const syber_server_1 = require("syber-server");
 const processors_1 = require("../processors");
 const schemas_1 = require("../schemas");
-class PostNitf21Schematic extends kyber_server_1.Schematic {
+class PostNitf21Schematic extends syber_server_1.Schematic {
     constructor() {
         super(...arguments);
         this.id = 'PostNitf21Schematic';
@@ -32,14 +32,14 @@ class PostNitf21Schematic extends kyber_server_1.Schematic {
         this.timeout = 10000;
         this.activities = [
             {
-                executionMode: kyber_server_1.ExecutionMode.Concurrent,
+                executionMode: syber_server_1.ExecutionMode.Concurrent,
                 id: 'PROCESS-ICOORDS',
                 ordinal: 0,
                 processes: [{
                         class: processors_1.Nitf21ICoordsDecisionTree,
                     }],
                 activities: [{
-                        executionMode: kyber_server_1.ExecutionMode.Concurrent,
+                        executionMode: syber_server_1.ExecutionMode.Concurrent,
                         id: 'PROCESS-COUNTRY-CODES',
                         ordinal: 1,
                         processes: [

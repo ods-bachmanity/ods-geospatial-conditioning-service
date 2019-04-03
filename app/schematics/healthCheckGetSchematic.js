@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const kyber_server_1 = require("kyber-server");
+const syber_server_1 = require("syber-server");
 const processors_1 = require("../processors");
 const schemas_1 = require("../schemas");
-class HealthCheckGetSchematic extends kyber_server_1.Schematic {
+class HealthCheckGetSchematic extends syber_server_1.Schematic {
     constructor() {
         super(...arguments);
         this.id = 'HealthCheckSchematic';
@@ -13,7 +13,7 @@ class HealthCheckGetSchematic extends kyber_server_1.Schematic {
         this.activities = [
             {
                 activities: [],
-                executionMode: kyber_server_1.ExecutionMode.Concurrent,
+                executionMode: syber_server_1.ExecutionMode.Concurrent,
                 id: 'COMPOSE',
                 ordinal: 0,
                 processes: [{
@@ -23,7 +23,7 @@ class HealthCheckGetSchematic extends kyber_server_1.Schematic {
         ];
         this.responses = [
             {
-                class: kyber_server_1.RawResponse,
+                class: syber_server_1.RawResponse,
                 httpStatus: 200,
                 schema: schemas_1.HealthResponseSchema,
             },

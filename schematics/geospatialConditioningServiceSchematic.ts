@@ -1,4 +1,4 @@
-import { GlobalSchematic, SchematicResponse } from 'kyber-server';
+import { GlobalSchematic, SchematicResponse } from 'syber-server';
 import { ErrorResponse } from '../common';
 import { ErrorResponseSchema } from '../schemas';
 

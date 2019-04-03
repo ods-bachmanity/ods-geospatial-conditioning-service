@@ -1,14 +1,13 @@
 import * as rp from 'request-promise';
-import { Logger } from './logger';
+import { ILogger } from 'syber-server';
 
 export class CoordinateConversionService {
 
     private servicePath: string = process.env.COORDCONVERSIONSERVICE_BASEURL;
     private healthEndpoint: string = process.env.COORDCONVERSIONSERVICE_HEALTHENDPOINT;
     private conversionEndpoint: string = process.env.COORDCONVERSIONSERVICE_CONVERSIONENDPOINT;
-    private logger: Logger = new Logger();
 
-    public constructor(private correlationId: string) {}
+    public constructor(private correlationId: string, private logger: ILogger ) {}
 
     public get(requestBody: any): Promise<any> {
 
@@ -25,7 +24,7 @@ export class CoordinateConversionService {
                 }
 
                 if (!requestBody) {
-                    this.logger.log(this.correlationId, `Invalid Request body in Coordinate Conversion Service Call`, `COORDINATECONVERSIONSERVICE.GET`);
+                    this.logger.warn(this.correlationId, `Invalid Request body in Coordinate Conversion Service Call`, `COORDINATECONVERSIONSERVICE.GET`);
                     return resolve(undefined);
                 }
 
@@ -59,9 +58,6 @@ export class CoordinateConversionService {
                     this.logger.error(this.correlationId, `Invalid health endpoint for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GETHEALTH`);
                     return reject({message: `Invalid health endpoint for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_HEALTHENDPOINT`});
                 }
-
-                // DEBUG
-                console.log(this.servicePath + this.healthEndpoint);
 
                 const response = await rp.get({
                     url: this.servicePath + this.healthEndpoint,

@@ -1,29 +1,30 @@
 import * as config from 'config';
-import { KyberServer, KyberServerEvents } from 'kyber-server';
+import { SyberServer, SyberServerEvents } from 'syber-server';
 import { Logger } from './common';
 import { GeospatialConditioningServiceSchematic, HealthCheckGetSchematic, PostNitf21Schematic } from './schematics';
 
-// Stand up Express Server Common Framework
-const kyber = new KyberServer({
-    port: config.port,
-});
-
 const logger = new Logger();
 
+// Stand up Express Server Common Framework
+const syber = new SyberServer({
+    port: config.port,
+    logger,
+});
+
 // register a global schematic to handle errors, run before each execution, run after each execution, startup and shutdown
-kyber.registerGlobalSchematic(
+syber.registerGlobalSchematic(
     GeospatialConditioningServiceSchematic,
     [],
 );
 
 // Handle Shutdown Event gracefully. Close database connection
-kyber.events.on(KyberServerEvents.ServerStopping, () => {
-    console.log(`\nServer Stopping...`);
+syber.events.on(SyberServerEvents.ServerStopping, () => {
+    logger.log(`SYS`, `\nServer Stopping...`, `index.onServerStopping`);
     // Nothing to do here
 });
 
 // GET /v2/ods/geospatialconversion/health
-kyber.registerRoute({
+syber.registerRoute({
     path: '/v2/ods/geospatialconditioning/health',
     schematic: HealthCheckGetSchematic,
     sharedResources: [],
@@ -31,7 +32,7 @@ kyber.registerRoute({
 });
 
 // POST /v2/ods/geospatialconversion/convert
-kyber.registerRoute({
+syber.registerRoute({
     path: '/v2/ods/geospatialconditioning/nitf21',
     schematic: PostNitf21Schematic,
     sharedResources: [],
@@ -39,16 +40,16 @@ kyber.registerRoute({
 });
 
 // Helper method to handle initialization and precondition check on database connection
-// Note: We do not call kyber.start() until after all routes are registered and all shared resources are verified/seeded etc.
+// Note: We do not call syber.start() until after all routes are registered and all shared resources are verified/seeded etc.
 async function startup() {
     try {
-        console.log(`Starting Application Server`);
-        console.log(`Initializing Logging Interface`);
-        logger.connect(kyber);
-        console.log(`Starting up Kyber Server`);
-        kyber.start();
+        logger.log(`SYS`, `Starting Application Server`, `index.startup`);
+        logger.log(`SYS`, `Initializing Logging Interface`, `index.startup`);
+        logger.connect(syber);
+        logger.log(`SYS`, `Starting up Syber Server`, `index.startup`);
+        syber.start();
     } catch (err) {
-        console.error(`ERROR STARTING APPLICATION: ${err}`);
+        logger.error(`SYS`, `ERROR STARTING APPLICATION: ${err}`, `index.startup`);
         process.exit(1);
     }
 }

@@ -8,3 +8,4 @@ __export(require("./geographicCoordsConverter"));
 __export(require("./utmmgrsCoordsConverter"));
 __export(require("./utmNorthCoordsConverter"));
 __export(require("./utmSouthCoordsConverter"));
+__export(require("./nitf21ConverterHelper"));

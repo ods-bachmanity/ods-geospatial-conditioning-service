@@ -9,24 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const config = require("config");
-const kyber_server_1 = require("kyber-server");
+const syber_server_1 = require("syber-server");
 const common_1 = require("./common");
 const schematics_1 = require("./schematics");
-const kyber = new kyber_server_1.KyberServer({
-    port: config.port,
-});
 const logger = new common_1.Logger();
-kyber.registerGlobalSchematic(schematics_1.GeospatialConditioningServiceSchematic, []);
-kyber.events.on(kyber_server_1.KyberServerEvents.ServerStopping, () => {
-    console.log(`\nServer Stopping...`);
+const syber = new syber_server_1.SyberServer({
+    port: config.port,
+    logger,
 });
-kyber.registerRoute({
+syber.registerGlobalSchematic(schematics_1.GeospatialConditioningServiceSchematic, []);
+syber.events.on(syber_server_1.SyberServerEvents.ServerStopping, () => {
+    logger.log(`SYS`, `\nServer Stopping...`, `index.onServerStopping`);
+});
+syber.registerRoute({
     path: '/v2/ods/geospatialconditioning/health',
     schematic: schematics_1.HealthCheckGetSchematic,
     sharedResources: [],
     verb: 'GET',
 });
-kyber.registerRoute({
+syber.registerRoute({
     path: '/v2/ods/geospatialconditioning/nitf21',
     schematic: schematics_1.PostNitf21Schematic,
     sharedResources: [],
@@ -35,14 +36,14 @@ kyber.registerRoute({
 function startup() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log(`Starting Application Server`);
-            console.log(`Initializing Logging Interface`);
-            logger.connect(kyber);
-            console.log(`Starting up Kyber Server`);
-            kyber.start();
+            logger.log(`SYS`, `Starting Application Server`, `index.startup`);
+            logger.log(`SYS`, `Initializing Logging Interface`, `index.startup`);
+            logger.connect(syber);
+            logger.log(`SYS`, `Starting up Syber Server`, `index.startup`);
+            syber.start();
         }
         catch (err) {
-            console.error(`ERROR STARTING APPLICATION: ${err}`);
+            logger.error(`SYS`, `ERROR STARTING APPLICATION: ${err}`, `index.startup`);
             process.exit(1);
         }
     });

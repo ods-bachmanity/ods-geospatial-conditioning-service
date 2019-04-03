@@ -1,3 +1,8 @@
+## v2.1.2 (April 2, 2019)
+
+* #38215 - Restructuring/fix Node app pipeline (logging, pm2, swagger)
+* #35736 - Implement Logging Architecture changes for Logging Conditioning Microservices
+
 ## v2.1.1 (March 29, 2019)
 
 * #39629 - Refactored nitf 2.1 converters code to use common functions for collecting information return from Coordinate Conversion and populate return structures.
