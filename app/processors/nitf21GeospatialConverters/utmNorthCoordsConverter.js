@@ -8,27 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const kyber_server_1 = require("kyber-server");
+const syber_server_1 = require("syber-server");
 const schemas_1 = require("../../schemas");
 const common_1 = require("../../common");
-class UTMNorthCoordsConverter extends kyber_server_1.BaseProcessor {
+const nitf21ConverterHelper_1 = require("./nitf21ConverterHelper");
+class UTMNorthCoordsConverter extends syber_server_1.BaseProcessor {
     constructor() {
         super(...arguments);
         this.className = 'UTMNorthCoordsConverter';
     }
-    fx(args) {
+    fx() {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
                 let errString = '';
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
                     errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
-                    console.error(errString);
-                    return reject({
-                        httpStatus: 400,
-                        message: `${errString}`,
-                        successful: false,
-                    });
+                    return reject(this.handleError({ message: errString }, `${this.className}.fx`, 400));
                 }
                 const ZONE_LENGTH = 2;
                 const EASTING_LENGTH = 6;
@@ -65,62 +61,30 @@ class UTMNorthCoordsConverter extends kyber_server_1.BaseProcessor {
                     }
                 }
                 coordinateConversionRequest.sourceCoordinates = coords;
-                const coordinateConversionService = new common_1.CoordinateConversionService(this.executionContext.correlationId);
+                const coordinateConversionService = new common_1.CoordinateConversionService(this.executionContext.correlationId, this.logger);
                 const body = yield coordinateConversionService.get(coordinateConversionRequest);
                 if (body && body.Coordinates) {
-                    this.executionContext.raw.geoJson = common_1.Utilities.toGeoJSON(body.Coordinates);
-                    this.executionContext.raw.wkt = common_1.Utilities.toWkt(body.Coordinates);
-                    this.executionContext.raw.coordType = 'N';
-                    if (!this.executionContext.raw.ods) {
-                        this.executionContext.raw.ods = {};
-                    }
-                    if (!this.executionContext.raw.ods.processors) {
-                        this.executionContext.raw.ods.processors = [];
-                    }
+                    const nitf21Helper = new nitf21ConverterHelper_1.Nitf21ConverterHelper(this.executionContext, this.processorDef, this.logger);
+                    nitf21Helper.populateCoordResults(body.Coordinates, 'N');
                     if (body.ODS && body.ODS.Processors) {
-                        this.executionContext.raw.ods.processors.push(body.ODS.Processors);
+                        nitf21Helper.populateProcResults(body.ODS.Processors);
                     }
-                    console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.ods, null, 1)}\n\n`);
-                    errString = '';
-                    if (!(this.executionContext.raw.wkt) || !((this.executionContext.raw.wkt).length > 0)) {
-                        errString += `\nFormatted wkt is empty in processor ${this.className}`;
-                    }
-                    if (!(this.executionContext.raw.geoJson) || !((this.executionContext.raw.geoJson.coordinates).length > 0)) {
-                        errString += `\nFormatted geoJson is empty in processor ${this.className}`;
-                    }
-                    if (errString.length > 0) {
-                        console.error(errString);
-                        return reject({
-                            httpStatus: 400,
-                            message: `${errString}`,
-                            successful: false,
-                        });
-                    }
-                    else {
-                        console.log(`\n${this.className} WROTE RAW ${JSON.stringify(this.executionContext.raw.wkt, null, 1)}\n\n`);
+                    const validationResult = nitf21Helper.getValidationResult(this.className);
+                    if (validationResult.errors) {
+                        return reject(this.handleError({ message: validationResult.errString }, `${this.className}.fx`, 400));
                     }
                 }
                 else {
                     errString = `Missing return from Coordinate Conversion Service in ${this.className}`;
-                    console.error(errString);
-                    return reject({
-                        httpStatus: 400,
-                        message: `${errString}`,
-                        successful: false,
-                    });
+                    return reject(this.handleError({ message: errString }, `${this.className}.fx`, 400));
                 }
-                this.executionContext.raw.converter = `${this.className}`;
+                this.executionContext.document.converter = `${this.className}`;
                 return resolve({
                     successful: true,
                 });
             }
             catch (err) {
-                console.error(`${this.className}: ${err}`);
-                return reject({
-                    httpStatus: 500,
-                    message: `${err}`,
-                    successful: false,
-                });
+                return reject(this.handleError(err, `${this.className}.fx`, 500));
             }
         }));
         return result;

@@ -1,40 +1,28 @@
-import { BaseProcessor, ProcessorResponse } from 'kyber-server';
+import { BaseProcessor, ProcessorResponse, ProcessorErrorResponse } from 'syber-server';
 import { CountryCodeService, Logger, Utilities } from '../common';
 
 export class CountryCodeComposer extends BaseProcessor {
 
-    public fx(args: any): Promise<ProcessorResponse> {
+    public fx(): Promise<ProcessorResponse|ProcessorErrorResponse> {
 
-        const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
+        const result: Promise<ProcessorResponse|ProcessorErrorResponse> = new Promise(async (resolve, reject) => {
 
             try {
-                const countryCodeService = new CountryCodeService(this.executionContext.correlationId);
+                const countryCodeService = new CountryCodeService(this.executionContext.correlationId, this.logger);
 
-                // DEBUG
-                console.log(`\n\n\nCALLING COUNTRY CODE SERVICE WITH ${this.executionContext.raw.wkt}\n\n\n`);
-                // DEBUG
-
-                const response = await countryCodeService.get(this.executionContext.raw.wkt);
-                this.executionContext.raw.countries = response && response.rows ? response.rows : [];
+                const response = await countryCodeService.get(this.executionContext.document.wkt);
+                this.executionContext.document.countries = response && response.rows ? response.rows : [];
 
                 // Grab ODS.Processor return section from CountryCodeService
-                this.executionContext.raw.ODS = this.executionContext.raw.ODS || {};
-                this.executionContext.raw.ODS.Processors = Object.assign({}, this.executionContext.raw.ODS.Processors, response.ODS.Processors);
-
-                // DEBUG
-                // console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
-                // DEBUG
+                this.executionContext.document.ODS = this.executionContext.document.ODS || {};
+                this.executionContext.document.ODS.Processors = Object.assign({}, this.executionContext.document.ODS.Processors,
+                    response.ODS.Processors);
 
                 return resolve({
                     successful: true,
                 });
             } catch (err) {
-                console.error(`CountryCodeComposer: ${err}`);
-                return reject({
-                    httpStatus: 500,
-                    message: `${err.message}`,
-                    successful: false,
-                });
+                return reject(this.handleError(err, `countryCodeComposer.fx`, 500));
             }
         });
 

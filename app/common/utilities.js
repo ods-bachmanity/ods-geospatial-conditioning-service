@@ -52,30 +52,46 @@ class Utilities {
         output += '))';
         return output;
     }
-    static comparePoints(pointOne, pointTwo) {
-        let pointsMatch = false;
-        if (pointOne.Height === pointTwo.Height && pointOne.Latitude === pointTwo.Latitude && pointOne.Longitude === pointTwo.Longitude) {
-            pointsMatch = true;
+    static toMbr(input) {
+        if (!input || input.length <= 0) {
+            return '';
         }
-        return pointsMatch;
+        let minLon = '180.0';
+        let maxLon = '-180.0';
+        let minLat = '90.0';
+        let maxLat = '-90.0';
+        let output = 'RECTANGLE (';
+        input.forEach((inputItem) => {
+            if (Number(inputItem.Longitude) < Number(minLon)) {
+                minLon = inputItem.Longitude;
+            }
+            if (Number(inputItem.Longitude) > Number(maxLon)) {
+                maxLon = inputItem.Longitude;
+            }
+            if (Number(inputItem.Latitude) < Number(minLat)) {
+                minLat = inputItem.Latitude;
+            }
+            if (Number(inputItem.Latitude) > Number(maxLat)) {
+                maxLat = inputItem.Latitude;
+            }
+        });
+        output += `${minLon} ${minLat},${maxLon} ${maxLat}`;
+        output += ')';
+        return output;
     }
-    static getOdsProcessorJSON(status, addLastUpdated) {
-        const date = new Date();
-        let timestamp = date.toISOString();
-        timestamp = timestamp.replace('Z', '+00:00');
-        const serviceName = process.env.npm_package_servicename ? process.env.npm_package_servicename : 'GCS default';
-        const serviceVersion = process.env.npm_package_version ? process.env.npm_package_version : 'default version';
-        const serviceLastUpdated = process.env.npm_package_lastupdated ? process.env.npm_package_lastupdated : '1970-01-01T00:00:00.000+00:00';
-        const jsonReturn = {};
-        jsonReturn[serviceName] = {
-            status: `${status}`,
-            timestamp: `${timestamp}`,
-            version: `${serviceVersion}`,
+    static comparePoints(pointOne, pointTwo) {
+        return (pointOne.Height === pointTwo.Height && pointOne.Latitude === pointTwo.Latitude && pointOne.Longitude === pointTwo.Longitude);
+    }
+    static getOdsProcessorJSON(status) {
+        const packageJson = require('../package.json');
+        const timestamp = new Date().toISOString().replace('Z', '+00:00');
+        return {
+            geospatialConditioner: {
+                status: status || 'success',
+                timestamp,
+                version: packageJson.version || 'Unknown',
+            },
         };
-        if (addLastUpdated) {
-            jsonReturn[serviceName].lastUpdated = serviceLastUpdated;
-        }
-        return jsonReturn;
     }
 }
 exports.Utilities = Utilities;

@@ -1,14 +1,13 @@
 import * as rp from 'request-promise';
-import { Logger } from './logger';
+import { ILogger } from 'syber-server';
 
 export class CountryCodeService {
 
     private servicePath: string = process.env.COUNTRYCODESERVICE_BASEURL;
     private healthEndpoint: string = process.env.COUNTRYCODESERVICE_HEALTHENDPOINT;
     private countriesEndpoint: string = process.env.COUNTRYCODESERVICE_COUNTRIESENDPOINT;
-    private logger: Logger = new Logger();
 
-    public constructor(private correlationId: string) {}
+    public constructor(private correlationId: string, private logger: ILogger) {}
 
     public get(wktInput: string): Promise<any> {
 
@@ -25,7 +24,7 @@ export class CountryCodeService {
                 }
 
                 if (!wktInput) {
-                    this.logger.log(this.correlationId, `Attempt to retrieve country code list for empty wkt string`, `COUNTRYCODESERVICE.GET`);
+                    this.logger.warn(this.correlationId, `Attempt to retrieve country code list for empty wkt string`, `COUNTRYCODESERVICE.GET`);
                     return resolve(undefined);
                 }
 
@@ -71,7 +70,7 @@ export class CountryCodeService {
                 return resolve(body);
 
             } catch (err) {
-                this.logger.warn(this.correlationId, `Warning, cannot reach Country Code Service: ${err.message}`, `COUNTRYCODESERVICE.GETHEALTH`);
+                this.logger.error(this.correlationId, `Warning, cannot reach Country Code Service: ${err.message}`, `COUNTRYCODESERVICE.GETHEALTH`);
                 return resolve(err);
             }
         });

@@ -9,28 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const rp = require("request-promise");
-const logger_1 = require("./logger");
 class CoordinateConversionService {
-    constructor(correlationId) {
+    constructor(correlationId, logger) {
         this.correlationId = correlationId;
-        this.servicePath = process.env.COORDCONVERSIONSERVICEURL;
-        this.logger = new logger_1.Logger();
+        this.logger = logger;
+        this.servicePath = process.env.COORDCONVERSIONSERVICE_BASEURL;
+        this.healthEndpoint = process.env.COORDCONVERSIONSERVICE_HEALTHENDPOINT;
+        this.conversionEndpoint = process.env.COORDCONVERSIONSERVICE_CONVERSIONENDPOINT;
     }
     get(requestBody) {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!this.servicePath) {
                     this.logger.error(this.correlationId, `Invalid Service Path for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GET`);
-                    return reject(`Invalid Service Path for Coordinate Conversion Service`);
+                    return reject(`Invalid Service Path for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_BASEURL`);
+                }
+                if (!this.conversionEndpoint) {
+                    this.logger.error(this.correlationId, `Invalid conversion endpoint for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GET`);
+                    return reject({ message: `Invalid conversion endpoint for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_CONVERSIONENDPOINT` });
                 }
                 if (!requestBody) {
-                    this.logger.log(this.correlationId, `Invalid Request body in Coordinate Conversion Service Call`, `COORDINATECONVERSIONSERVICE.GET`);
+                    this.logger.warn(this.correlationId, `Invalid Request body in Coordinate Conversion Service Call`, `COORDINATECONVERSIONSERVICE.GET`);
                     return resolve(undefined);
                 }
                 const response = yield rp.post({
                     body: JSON.stringify(requestBody),
                     headers: { 'content-type': 'application/json' },
-                    url: this.servicePath,
+                    url: this.servicePath + this.conversionEndpoint,
                 });
                 const records = JSON.parse(response);
                 return resolve(records);
@@ -38,6 +43,31 @@ class CoordinateConversionService {
             catch (err) {
                 this.logger.error(this.correlationId, `Error in Coordinate Conversion Service: ${err.message}`, `COORDINATECONVERSIONSERVICE.GET`);
                 return reject(err);
+            }
+        }));
+        return result;
+    }
+    getHealth() {
+        const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!this.servicePath) {
+                    this.logger.error(this.correlationId, `Invalid Service Path for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GETHEALTH`);
+                    return reject({ message: `Invalid Service Path for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_BASEURL` });
+                }
+                if (!this.healthEndpoint) {
+                    this.logger.error(this.correlationId, `Invalid health endpoint for Coordinate Conversion Service`, `COORDINATECONVERSIONSERVICE.GETHEALTH`);
+                    return reject({ message: `Invalid health endpoint for Coordinate Conversion Service, update environment value for COORDCONVERSIONSERVICE_HEALTHENDPOINT` });
+                }
+                const response = yield rp.get({
+                    url: this.servicePath + this.healthEndpoint,
+                });
+                const body = JSON.parse(response);
+                body.healthy = true;
+                return resolve(body);
+            }
+            catch (err) {
+                this.logger.warn(this.correlationId, `Warning, cannot reach Coordinate Conversion Service: ${err.message}`, `COORDINATECONVERSIONSERVICE.GETHEALTH`);
+                return resolve(err);
             }
         }));
         return result;

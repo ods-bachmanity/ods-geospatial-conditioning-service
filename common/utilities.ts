@@ -108,13 +108,7 @@ export class Utilities {
     }
 
     public static comparePoints(pointOne: DecimalDegreeCoordinateSchema, pointTwo: DecimalDegreeCoordinateSchema): boolean {
-        let pointsMatch: boolean = false;
-
-        if (pointOne.Height === pointTwo.Height && pointOne.Latitude === pointTwo.Latitude && pointOne.Longitude === pointTwo.Longitude) {
-            pointsMatch = true;
-        }
-
-        return pointsMatch;
+        return (pointOne.Height === pointTwo.Height && pointOne.Latitude === pointTwo.Latitude && pointOne.Longitude === pointTwo.Longitude);
     }
 
     public static getOdsProcessorJSON(status?: string): any {

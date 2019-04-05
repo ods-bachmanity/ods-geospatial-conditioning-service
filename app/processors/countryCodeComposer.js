@@ -8,37 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const kyber_server_1 = require("kyber-server");
+const syber_server_1 = require("syber-server");
 const common_1 = require("../common");
-class CountryCodeComposer extends kyber_server_1.BaseProcessor {
-    fx(args) {
+class CountryCodeComposer extends syber_server_1.BaseProcessor {
+    fx() {
         const result = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const countryCodeService = new common_1.CountryCodeService(this.executionContext.correlationId);
-                console.log(`\n\n\nCALLING COUNTRY CODE SERVICE WITH ${this.executionContext.raw.wkt}\n\n\n`);
-                const response = yield countryCodeService.get(this.executionContext.raw.wkt);
-                this.executionContext.raw.countries = response && response.rows ? response.rows : [];
-                if (!this.executionContext.raw.ods) {
-                    this.executionContext.raw.ods = {};
-                }
-                if (!this.executionContext.raw.ods.processors) {
-                    this.executionContext.raw.ods.processors = [];
-                }
-                if (response && response.ODS && response.ODS.Processors) {
-                    this.executionContext.raw.ods.processors.push(response.ODS.Processors);
-                }
-                console.log(`\n\nCOUNTRY CODE SERVICE RESPONSE: ${JSON.stringify(response, null, 1)}\n\n`);
+                const countryCodeService = new common_1.CountryCodeService(this.executionContext.correlationId, this.logger);
+                const response = yield countryCodeService.get(this.executionContext.document.wkt);
+                this.executionContext.document.countries = response && response.rows ? response.rows : [];
+                this.executionContext.document.ODS = this.executionContext.document.ODS || {};
+                this.executionContext.document.ODS.Processors = Object.assign({}, this.executionContext.document.ODS.Processors, response.ODS.Processors);
                 return resolve({
                     successful: true,
                 });
             }
             catch (err) {
-                console.error(`CountryCodeComposer: ${err}`);
-                return reject({
-                    httpStatus: 500,
-                    message: `${err.message}`,
-                    successful: false,
-                });
+                return reject(this.handleError(err, `countryCodeComposer.fx`, 500));
             }
         }));
         return result;

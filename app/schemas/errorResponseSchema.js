@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const kyber_server_1 = require("kyber-server");
-class ErrorResponseSchema extends kyber_server_1.SchemaDef {
+const syber_server_1 = require("syber-server");
+class ErrorResponseSchema extends syber_server_1.SchemaDef {
     constructor() {
         super(...arguments);
         this.id = 'ErrorResponseSchema';
