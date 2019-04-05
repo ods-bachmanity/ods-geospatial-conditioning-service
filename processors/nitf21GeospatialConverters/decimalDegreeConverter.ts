@@ -18,7 +18,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
                     errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
-                    return reject(this.handleError({message: errString}, `decimalDegreeConverter.fx`, 400));
+                    return reject(this.handleError({message: errString}, `${this.className}.fx`, 400));
                 }
 
                 // # Put IGEOLO string into format for loading into object.
@@ -48,7 +48,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                     } else if (rawSubLat[0] === '-') {
                         formattedLat = rawSubLat.substr(0, LAT_LENGTH);
                     } else {
-                        return reject(this.handleError({message: `Invalid Latitude Coordinate: ${rawSubLat}`}, `decimalDegreeConverter.fx`, 400));
+                        return reject(this.handleError({message: `Invalid Latitude Coordinate: ${rawSubLat}`}, `${this.className}.fx`, 400));
                     }
 
                     // format lon
@@ -59,7 +59,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                     } else if (rawSubLon[0] === '-') {
                         formattedLon = rawSubLon.substr(0, LON_LENGTH);
                     } else {
-                        return reject(this.handleError({message: `Invalid Longitude Coordinate: ${rawSubLon}`}, `decimalDegreeConverter.fx`, 400));
+                        return reject(this.handleError({message: `Invalid Longitude Coordinate: ${rawSubLon}`}, `${this.className}.fx`, 400));
                     }
 
                     // Add to arrCoor array.
@@ -71,7 +71,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                 }
 
                 if (arrCoords.length > 0) {
-                    const nitf21Helper: Nitf21ConverterHelper = new Nitf21ConverterHelper(this.executionContext, this.processorDef, this.logger);
+                    const nitf21Helper = new Nitf21ConverterHelper(this.executionContext, this.processorDef, this.logger);
 
                     // Pass the decimal degree coordinates to be converted and stored into geoJson, mbr, and wkt formats.
                     nitf21Helper.populateCoordResults(arrCoords, 'D');
@@ -81,11 +81,11 @@ export class DecimalDegreeConverter extends BaseProcessor {
 
                     // Report failure or log formatted wkt string.
                     if (validationResult.errors) {
-                        return reject(this.handleError({message: validationResult.errString}, `decimalDegreeConverter.fx`, 400));
+                        return reject(this.handleError({message: validationResult.errString}, `${this.className}.fx`, 400));
                     }
                 } else {
                     errString = `Failed to create coordinate array in ${this.className}`;
-                    return reject(this.handleError({message: errString}, `decimalDegreeConverter`, 400));
+                    return reject(this.handleError({message: errString}, `${this.className}`, 400));
                 }
 
                 this.executionContext.document.converter = `${this.className}`;
@@ -94,7 +94,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                 });
 
             } catch (err) {
-                return reject(this.handleError(err, `decimalDegreeConverter.fx`, 500));
+                return reject(this.handleError(err, `${this.className}.fx`, 500));
             }
         });
 

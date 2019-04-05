@@ -24,7 +24,7 @@ class UTMSouthCoordsConverter extends syber_server_1.BaseProcessor {
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
                     errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
-                    return reject(this.handleError({ message: errString }, `utmSouthCoordsConverter.fx`, 400));
+                    return reject(this.handleError({ message: errString }, `${this.className}.fx`, 400));
                 }
                 const ZONE_LENGTH = 2;
                 const EASTING_LENGTH = 6;
@@ -54,12 +54,12 @@ class UTMSouthCoordsConverter extends syber_server_1.BaseProcessor {
                     }
                     const validationResult = nitf21Helper.getValidationResult(this.className);
                     if (validationResult.errors) {
-                        return reject(this.handleError({ message: validationResult.errString }, `utmSouthCoordsConverter.fx`, 400));
+                        return reject(this.handleError({ message: validationResult.errString }, `${this.className}.fx`, 400));
                     }
                 }
                 else {
                     errString = `Missing return from Coordinate Conversion Service in ${this.className}`;
-                    return reject(this.handleError({ message: errString }, `utmSouthCoordsConverter.fx`, 400));
+                    return reject(this.handleError({ message: errString }, `${this.className}.fx`, 400));
                 }
                 this.executionContext.document.converter = `${this.className}`;
                 return resolve({
@@ -67,7 +67,7 @@ class UTMSouthCoordsConverter extends syber_server_1.BaseProcessor {
                 });
             }
             catch (err) {
-                return reject(this.handleError(err, `utmSouthCoordsConverter.fx`, 500));
+                return reject(this.handleError(err, `${this.className}.fx`, 500));
             }
         }));
         return result;

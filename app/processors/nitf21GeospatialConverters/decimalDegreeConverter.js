@@ -22,7 +22,7 @@ class DecimalDegreeConverter extends syber_server_1.BaseProcessor {
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
                     errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
-                    return reject(this.handleError({ message: errString }, `decimalDegreeConverter.fx`, 400));
+                    return reject(this.handleError({ message: errString }, `${this.className}.fx`, 400));
                 }
                 const LAT_LENGTH = 7;
                 const LON_LENGTH = 8;
@@ -40,7 +40,7 @@ class DecimalDegreeConverter extends syber_server_1.BaseProcessor {
                         formattedLat = rawSubLat.substr(0, LAT_LENGTH);
                     }
                     else {
-                        return reject(this.handleError({ message: `Invalid Latitude Coordinate: ${rawSubLat}` }, `decimalDegreeConverter.fx`, 400));
+                        return reject(this.handleError({ message: `Invalid Latitude Coordinate: ${rawSubLat}` }, `${this.className}.fx`, 400));
                     }
                     let formattedLon = '';
                     if (rawSubLon[0] === '+') {
@@ -50,7 +50,7 @@ class DecimalDegreeConverter extends syber_server_1.BaseProcessor {
                         formattedLon = rawSubLon.substr(0, LON_LENGTH);
                     }
                     else {
-                        return reject(this.handleError({ message: `Invalid Longitude Coordinate: ${rawSubLon}` }, `decimalDegreeConverter.fx`, 400));
+                        return reject(this.handleError({ message: `Invalid Longitude Coordinate: ${rawSubLon}` }, `${this.className}.fx`, 400));
                     }
                     arrCoords.push({
                         Height: '0',
@@ -63,12 +63,12 @@ class DecimalDegreeConverter extends syber_server_1.BaseProcessor {
                     nitf21Helper.populateCoordResults(arrCoords, 'D');
                     const validationResult = nitf21Helper.getValidationResult(this.className);
                     if (validationResult.errors) {
-                        return reject(this.handleError({ message: validationResult.errString }, `decimalDegreeConverter.fx`, 400));
+                        return reject(this.handleError({ message: validationResult.errString }, `${this.className}.fx`, 400));
                     }
                 }
                 else {
                     errString = `Failed to create coordinate array in ${this.className}`;
-                    return reject(this.handleError({ message: errString }, `decimalDegreeConverter`, 400));
+                    return reject(this.handleError({ message: errString }, `${this.className}`, 400));
                 }
                 this.executionContext.document.converter = `${this.className}`;
                 return resolve({
@@ -76,7 +76,7 @@ class DecimalDegreeConverter extends syber_server_1.BaseProcessor {
                 });
             }
             catch (err) {
-                return reject(this.handleError(err, `decimalDegreeConverter.fx`, 500));
+                return reject(this.handleError(err, `${this.className}.fx`, 500));
             }
         }));
         return result;
