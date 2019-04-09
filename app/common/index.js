@@ -8,3 +8,4 @@ __export(require("./errorResponse"));
 __export(require("./coordinateConversionService"));
 __export(require("./utilities"));
 __export(require("./countryCodeService"));
+__export(require("./httpLogger"));

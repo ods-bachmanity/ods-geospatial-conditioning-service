@@ -1,6 +1,6 @@
 import * as config from 'config';
 import { SyberServer, SyberServerEvents } from 'syber-server';
-import { Logger } from './common';
+import { Logger, HttpLogger } from './common';
 import { GeospatialConditioningServiceSchematic, HealthCheckGetSchematic, PostNitf21Schematic } from './schematics';
 
 const logger = new Logger();
@@ -11,6 +11,9 @@ const syber = new SyberServer({
     logger,
 });
 
+const httpLogger = new HttpLogger(syber.express, logger);
+httpLogger.init();
+
 // register a global schematic to handle errors, run before each execution, run after each execution, startup and shutdown
 syber.registerGlobalSchematic(
     GeospatialConditioningServiceSchematic,
@@ -20,6 +23,7 @@ syber.registerGlobalSchematic(
 // Handle Shutdown Event gracefully. Close database connection
 syber.events.on(SyberServerEvents.ServerStopping, () => {
     logger.log(`SYS`, `\nServer Stopping...`, `index.onServerStopping`);
+    httpLogger.destroy();
     // Nothing to do here
 });
 

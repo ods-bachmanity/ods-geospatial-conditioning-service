@@ -17,9 +17,12 @@ const syber = new syber_server_1.SyberServer({
     port: config.port,
     logger,
 });
+const httpLogger = new common_1.HttpLogger(syber.express, logger);
+httpLogger.init();
 syber.registerGlobalSchematic(schematics_1.GeospatialConditioningServiceSchematic, []);
 syber.events.on(syber_server_1.SyberServerEvents.ServerStopping, () => {
     logger.log(`SYS`, `\nServer Stopping...`, `index.onServerStopping`);
+    httpLogger.destroy();
 });
 syber.registerRoute({
     path: '/v2/ods/geospatialconditioning/health',
