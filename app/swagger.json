@@ -21,19 +21,46 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "HealthCheck": {
+                    "countryCodeService": {
                       "type": "string",
-                      "example": "OK"
+                      "example": "Reachable"
                     },
-                    "Message": {
+                    "coordinateConversionService": {
                       "type": "string",
-                      "example": "No Rest for Old Men"
+                      "example": "Reachable"
+                    },
+                    "ODS": {
+                      "type": "object",
+                      "properties": {
+                        "Processors": {
+                          "type": "object",
+                          "properties": {
+                            "geospatialConditioner": {
+                              "type": "object",
+                              "properties": {
+                                "status": {
+                                  "type": "string",
+                                  "example": "success"
+                                },
+                                "timestamp": {
+                                  "type": "string",
+                                  "example": "2019-03-09T21:50:04.376+00:00"
+                                },
+                                "version": {
+                                  "type": "string",
+                                  "example": "2.1.4"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 },
                 "examples": {
                   "0": {
-                    "value": "{\"HealthCheck\":\"OK\",\"Message\":\"No Rest for Old Men\"}"
+                    "value": "{\"countryCodeService\":\"Reachable\",\"coordinateConversionService\":\"Reachable\",\"ODS\":{\"Processors\":{\"geospatialConditioner\":{\"status\":\"success\",\"timestamp\":\"2019-03-10T14:33:21.029+00:00\",\"version\":\"2.1.4\"}}}}"
                   }
                 }
               }
@@ -122,25 +149,25 @@
     },
     "/v2/ods/geospatialconditioning/nitf21": {
       "post": {
-        "description": "To do.",
+        "description": "Service to provide geospatial metadata for NITF2.1 rawheader footprint.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "properties": {
-                  "ICOORDS": {
+                  "ICORDS": {
                     "type": "string",
                     "example": "D"
                   },
                   "IGEOLO": {
                     "type": "string",
-                    "example": "SAMPLE IGEOLO GOES HERE"
+                    "example": "+52.000+000.000+53.000+000.000+53.000+001.000+52.000+001.000"
                   }
                 }
               },
               "example": {
-                "ICOORDS": "D",
-                "IGEOLO": "SOME IGEOLO GOES HERE"
+                "ICORDS": "D",
+                "IGEOLO": "+52.000+000.000+53.000+000.000+53.000+001.000+52.000+001.000"
               }
             }
           }
@@ -152,12 +179,97 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "todo": "todo"
+                    "GEO": {
+                      "type": "object",
+                      "properties": {
+                        "WKT": {
+                          "type": "string",
+                          "example": "POLYGON ((000.000 52.000,000.000 53.000,001.000 53.000,001.000 52.000,000.000 52.000))"
+                        },
+                        "GeoJSON": {
+                          "type": "object",
+                          "properties": {
+                            "coordinates": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "integer",
+                                    "example": 0
+                                  }
+                                }
+                              }
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "Polygon"
+                            }
+                          }
+                        },
+                        "MBR": {
+                          "type": "string",
+                          "example": "RECTANGLE (000.000 52.000,001.000 53.000)"
+                        },
+                        "CountryCodes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "GBR"
+                          }
+                        }
+                      }
+                    },
+                    "ODS": {
+                      "type": "object",
+                      "properties": {
+                        "Processors": {
+                          "type": "object",
+                          "properties": {
+                            "countrycode": {
+                              "type": "object",
+                              "properties": {
+                                "status": {
+                                  "type": "string",
+                                  "example": "success"
+                                },
+                                "timestamp": {
+                                  "type": "string",
+                                  "example": "2019-03-09T21:50:04.376+00:00"
+                                },
+                                "version": {
+                                  "type": "string",
+                                  "example": "2.0.13"
+                                }
+                              }
+                            },
+                            "geospatialConditioner": {
+                              "type": "object",
+                              "properties": {
+                                "status": {
+                                  "type": "string",
+                                  "example": "success"
+                                },
+                                "timestamp": {
+                                  "type": "string",
+                                  "example": "2019-03-09T21:50:04.376+00:00"
+                                },
+                                "version": {
+                                  "type": "string",
+                                  "example": "2.1.3"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 },
                 "examples": {
                   "0": {
-                    "value": "todo"
+                    "value": "{\"GEO\":{\"WKT\":\"POLYGON ((000.000 52.000,000.000 53.000,001.000 53.000,001.000 52.000,000.000 52.000))\",\"GeoJSON\":{\"coordinates\":[[[0,52,0],[0,53,0],[1,53,0],[1,52,0],[0,52,0]]],\"type\":\"Polygon\"},\"MBR\":\"RECTANGLE (000.000 52.000,001.000 53.000)\",\"CountryCodes\":[\"GBR\"]},\"ODS\":{\"Processors\":{\"countrycode\":{\"status\":\"success\",\"timestamp\":\"2019-03-09T21:28:37.514+00:00\",\"version\":\"2.0.13\"},\"geospatialConditioner\":{\"status\":\"success\",\"timestamp\":\"2019-03-09T21:28:37.539+00:00\",\"version\":\"2.1.3\"}}}}"
                   }
                 }
               }

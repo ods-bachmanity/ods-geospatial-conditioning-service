@@ -1,3 +1,7 @@
+## v2.1.4 (April 10, 2019)
+
+* #39691 - Update Swagger definition to include new ODS Processors node
+
 ## v2.1.3 (April 9, 2019)
 
 * #36945 - Add HTTP Logging to GCS - Dependent on Research and document exactly what each service needs to log (Mike)
