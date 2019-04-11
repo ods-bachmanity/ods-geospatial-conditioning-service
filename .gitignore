@@ -67,4 +67,5 @@ _docker/
 app/node_modules
 app/.env
 app/**/*.js
+!app/ecosystem.config.js
 app/index.js
