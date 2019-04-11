@@ -80,11 +80,11 @@
                             " errorResponse = pm.response.json()",
                             " testData = pm.iterationData.get(\"testData\")",
                             " console.log(testData[testNumber-1].testName)",
-                            " expectedReponse = testData[testNumber-1].expectedReponse",
-                            " pm.expect(errorResponse.code).to.equal(expectedReponse.code);",
-                            " pm.expect(errorResponse.message).to.equal(expectedReponse.message);",
-                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedReponse.errors);",
-                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedReponse.warnings);",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code)",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message)",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors)",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings)",
                             "});",
                             ""
                         ]
@@ -136,11 +136,11 @@
                             " errorResponse = pm.response.json()",
                             " testData = pm.iterationData.get(\"testData\")",
                             " console.log(testData[testNumber-1].testName)",
-                            " expectedReponse = testData[testNumber-1].expectedReponse",
-                            " pm.expect(errorResponse.code).to.equal(expectedReponse.code);",
-                            " pm.expect(errorResponse.message).to.equal(expectedReponse.message);",
-                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedReponse.errors);",
-                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedReponse.warnings);",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
                             "});",
                             ""
                         ]
@@ -192,11 +192,11 @@
                             " errorResponse = pm.response.json()",
                             " testData = pm.iterationData.get(\"testData\")",
                             " console.log(testData[testNumber-1].testName)",
-                            " expectedReponse = testData[testNumber-1].expectedReponse",
-                            " pm.expect(errorResponse.code).to.equal(expectedReponse.code);",
-                            " pm.expect(errorResponse.message).to.equal(expectedReponse.message);",
-                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedReponse.errors);",
-                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedReponse.warnings);",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
                             "});",
                             ""
                         ]
@@ -247,11 +247,11 @@
                             " errorResponse = pm.response.json()",
                             " testData = pm.iterationData.get(\"testData\")",
                             " console.log(testData[testNumber-1].testName)",
-                            " expectedReponse = testData[testNumber-1].expectedReponse",
-                            " pm.expect(errorResponse.code).to.equal(expectedReponse.code);",
-                            " pm.expect(errorResponse.message).to.equal(expectedReponse.message);",
-                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedReponse.errors);",
-                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedReponse.warnings);",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
                             "});"
                         ]
                     }
@@ -301,11 +301,11 @@
                             " errorResponse = pm.response.json()",
                             " testData = pm.iterationData.get(\"testData\")",
                             " console.log(testData[testNumber-1].testName)",
-                            " expectedReponse = testData[testNumber-1].expectedReponse",
-                            " pm.expect(errorResponse.code).to.equal(expectedReponse.code);",
-                            " pm.expect(errorResponse.message).to.equal(expectedReponse.message);",
-                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedReponse.errors);",
-                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedReponse.warnings);",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
                             "});"
                         ]
                     }
@@ -355,11 +355,11 @@
                             " errorResponse = pm.response.json()",
                             " testData = pm.iterationData.get(\"testData\")",
                             " console.log(testData[testNumber-1].testName)",
-                            " expectedReponse = testData[testNumber-1].expectedReponse",
-                            " pm.expect(errorResponse.code).to.equal(expectedReponse.code);",
-                            " pm.expect(errorResponse.message).to.equal(expectedReponse.message);",
-                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedReponse.errors);",
-                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedReponse.warnings);",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
                             "});"
                         ]
                     }
@@ -408,11 +408,11 @@
                             " errorResponse = pm.response.json()",
                             " testData = pm.iterationData.get(\"testData\")",
                             " console.log(testData[testNumber-1].testName)",
-                            " expectedReponse = testData[testNumber-1].expectedReponse",
-                            " pm.expect(errorResponse.code).to.equal(expectedReponse.code);",
-                            " pm.expect(errorResponse.message).to.equal(expectedReponse.message);",
-                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedReponse.errors);",
-                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedReponse.warnings);",
+                            " expectedResponse = testData[testNumber-1].expectedResponse",
+                            " pm.expect(errorResponse.code).to.equal(expectedResponse.code);",
+                            " pm.expect(errorResponse.message).to.equal(expectedResponse.message);",
+                            " pm.expect(errorResponse.errors).to.have.deep.members(expectedResponse.errors);",
+                            " pm.expect(errorResponse.warnings).to.have.deep.members(expectedResponse.warnings);",
                             "});"
                         ]
                     }
