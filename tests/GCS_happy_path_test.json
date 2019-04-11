@@ -86,6 +86,7 @@
               " testData = pm.iterationData.get(\"testData\")",
               " expectedResponse = testData[testNumber-1].expectedResponse;",
               "pm.expect(JSON.stringify(jsonData.GEO[\"GeoJSON\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"GeoJSON\"]));",
+              "pm.expect(JSON.stringify(jsonData.GEO[\"MBR\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"MBR\"]));",
               "pm.expect(expectedResponse[0].GEO[\"CountryCodes\"]).to.have.deep.members(jsonData.GEO[\"CountryCodes\"]);",
               "});"
             ]
@@ -137,6 +138,7 @@
               "testData = pm.iterationData.get(\"testData\")",
               "expectedResponse = testData[testNumber-1].expectedResponse;",
               "pm.expect(JSON.stringify(jsonData.GEO[\"GeoJSON\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"GeoJSON\"]));",
+              "pm.expect(JSON.stringify(jsonData.GEO[\"MBR\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"MBR\"]));",
               "pm.expect(expectedResponse[0].GEO[\"CountryCodes\"]).to.have.deep.members(jsonData.GEO[\"CountryCodes\"]);",
               "});"
             ]
@@ -188,6 +190,7 @@
               "testData = pm.iterationData.get(\"testData\")",
               "expectedResponse = testData[testNumber-1].expectedResponse;",
               "pm.expect(JSON.stringify(jsonData.GEO[\"GeoJSON\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"GeoJSON\"]));",
+              "pm.expect(JSON.stringify(jsonData.GEO[\"MBR\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"MBR\"]));",
               "pm.expect(expectedResponse[0].GEO[\"CountryCodes\"]).to.have.deep.members(jsonData.GEO[\"CountryCodes\"]);",
               "});"
             ]
@@ -239,6 +242,7 @@
               "testData = pm.iterationData.get(\"testData\")",
               "expectedResponse = testData[testNumber-1].expectedResponse;",
               "pm.expect(JSON.stringify(jsonData.GEO[\"GeoJSON\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"GeoJSON\"]));",
+              "pm.expect(JSON.stringify(jsonData.GEO[\"MBR\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"MBR\"]));",
               "pm.expect(expectedResponse[0].GEO[\"CountryCodes\"]).to.have.deep.members(jsonData.GEO[\"CountryCodes\"]);",
               "});"
             ]
@@ -290,6 +294,7 @@
               "testData = pm.iterationData.get(\"testData\")",
               "expectedResponse = testData[testNumber-1].expectedResponse;",
               "pm.expect(JSON.stringify(jsonData.GEO[\"GeoJSON\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"GeoJSON\"]));",
+              "pm.expect(JSON.stringify(jsonData.GEO[\"MBR\"])).to.equal(JSON.stringify(expectedResponse[0].GEO[\"MBR\"]));",
               "pm.expect(expectedResponse[0].GEO[\"CountryCodes\"]).to.have.deep.members(jsonData.GEO[\"CountryCodes\"]);",
               "});"
             ]
