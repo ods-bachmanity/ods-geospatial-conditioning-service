@@ -1,4 +1,4 @@
-import { Activity, ExecutionMode, Parameter, Schematic, SchematicResponse } from 'kyber-server';
+import { Activity, ExecutionMode, Parameter, Schematic, SchematicResponse } from 'syber-server';
 import { CountryCodeComposer, Nitf21ICoordsDecisionTree, Nitf21Response } from '../processors';
 import { DefaultResponseSchema } from '../schemas';
 
@@ -23,7 +23,7 @@ export class PostNitf21Schematic extends Schematic {
         {
             name: 'fingerprint',
             dataType: 'string',
-            required: true,
+            required: false,
             source: 'req.body.fingerprint',
         },
     ];

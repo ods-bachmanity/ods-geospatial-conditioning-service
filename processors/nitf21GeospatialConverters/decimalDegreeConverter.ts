@@ -1,24 +1,27 @@
-import { BaseProcessor, ProcessorResponse } from 'kyber-server';
+import { BaseProcessor, ProcessorResponse, ProcessorErrorResponse, ExecutionContext, ProcessorDef } from 'syber-server';
 import { Utilities } from '../../common';
 import { DecimalDegreeCoordinateSchema } from '../../schemas';
+import { Nitf21ConverterHelper } from './nitf21ConverterHelper';
 
 export class DecimalDegreeConverter extends BaseProcessor {
 
-    public fx(args: any): Promise<ProcessorResponse> {
+    public className: string = 'DecimalDegreeConverter';
 
-        const result: Promise<ProcessorResponse> = new Promise(async (resolve, reject) => {
+    public fx(): Promise<ProcessorResponse|ProcessorErrorResponse> {
+
+        const result: Promise<ProcessorResponse|ProcessorErrorResponse> = new Promise(async (resolve, reject) => {
 
             try {
+                let errString: string = '';
+
+                // # Gather the IGEOLO string
                 const nitfIGEOLO = this.executionContext.getParameterValue('IGEOLO');
                 if (!nitfIGEOLO || nitfIGEOLO.length !== 60) {
-                    console.error(`Invalid IGEOLO: ${nitfIGEOLO}`);
-                    return reject({
-                        message: `Invalid IGEOLO: ${nitfIGEOLO}`,
-                        successful: false,
-                    });
+                    errString = `${this.className} - Invalid IGEOLO: ${nitfIGEOLO}`;
+                    return reject(this.handleError({message: errString}, `${this.className}.fx`, 400));
                 }
 
-                // # Put it into format for loading into object.
+                // # Put IGEOLO string into format for loading into object.
 
                 // There are four 15 character coordinate strings in IGEOLO
                 // First 7 bytes make up Latitude portion (±dd.ddd)
@@ -45,10 +48,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                     } else if (rawSubLat[0] === '-') {
                         formattedLat = rawSubLat.substr(0, LAT_LENGTH);
                     } else {
-                        return reject({
-                            message: `Invalid Latitude Coordinate: ${rawSubLat}`,
-                            successful: false,
-                        });
+                        return reject(this.handleError({message: `Invalid Latitude Coordinate: ${rawSubLat}`}, `${this.className}.fx`, 400));
                     }
 
                     // format lon
@@ -59,10 +59,7 @@ export class DecimalDegreeConverter extends BaseProcessor {
                     } else if (rawSubLon[0] === '-') {
                         formattedLon = rawSubLon.substr(0, LON_LENGTH);
                     } else {
-                        return reject({
-                            message: `Invalid Longitude Coordinate: ${rawSubLon}`,
-                            successful: false,
-                        });
+                        return reject(this.handleError({message: `Invalid Longitude Coordinate: ${rawSubLon}`}, `${this.className}.fx`, 400));
                     }
 
                     // Add to arrCoor array.
@@ -74,22 +71,30 @@ export class DecimalDegreeConverter extends BaseProcessor {
                 }
 
                 if (arrCoords.length > 0) {
-                    this.executionContext.raw.geoJson = Utilities.toGeoJSON(arrCoords);
-                    this.executionContext.raw.wkt = Utilities.toWkt(arrCoords);
-                    this.executionContext.raw.coordType = 'D';
+                    const nitf21Helper = new Nitf21ConverterHelper(this.executionContext, this.processorDef, this.logger);
+
+                    // Pass the decimal degree coordinates to be converted and stored into geoJson, mbr, and wkt formats.
+                    nitf21Helper.populateCoordResults(arrCoords, 'D');
+
+                    // Check if formatting to geoJson, mbr, and wkt was successful.
+                    const validationResult = nitf21Helper.getValidationResult(this.className);
+
+                    // Report failure or log formatted wkt string.
+                    if (validationResult.errors) {
+                        return reject(this.handleError({message: validationResult.errString}, `${this.className}.fx`, 400));
+                    }
+                } else {
+                    errString = `Failed to create coordinate array in ${this.className}`;
+                    return reject(this.handleError({message: errString}, `${this.className}`, 400));
                 }
 
+                this.executionContext.document.converter = `${this.className}`;
                 return resolve({
                     successful: true,
                 });
 
             } catch (err) {
-                console.error(`DecimalDegreeConverter: ${err}`);
-                return reject({
-                    httpStatus: 500,
-                    message: `${err}`,
-                    successful: false,
-                });
+                return reject(this.handleError(err, `${this.className}.fx`, 500));
             }
         });
 

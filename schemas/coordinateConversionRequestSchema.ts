@@ -1,5 +1,5 @@
 import { GeographicSourceCoordinateSchema,
-    MGRSSourceCoordinateSchema,
+    UTMSourceCoordinateSchema,
     SourceCoordinateStringSchema } from './';
 
 export class CoordinateConversionRequestSchema {
@@ -16,5 +16,5 @@ export class CoordinateConversionRequestSchema {
     public targetZone: boolean = false;
 
     public sourceCoordinateType: number = -1;
-    public sourceCoordinates: Array<GeographicSourceCoordinateSchema|MGRSSourceCoordinateSchema|SourceCoordinateStringSchema> = [];
+    public sourceCoordinates: Array<GeographicSourceCoordinateSchema|UTMSourceCoordinateSchema|SourceCoordinateStringSchema> = [];
 }

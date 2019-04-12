@@ -1,23 +1,23 @@
-import { BaseProcessor, ProcessorResponse } from 'kyber-server';
+import { BaseProcessor, ProcessorResponse, ProcessorErrorResponse } from 'syber-server';
 
 export class ErrorResponse extends BaseProcessor {
 
-    public fx(args: any): Promise<ProcessorResponse> {
+    public fx(): Promise<ProcessorResponse|ProcessorErrorResponse> {
 
-        const result: Promise<ProcessorResponse> = new Promise((resolve, reject) => {
+        const result: Promise<ProcessorResponse|ProcessorErrorResponse> = new Promise((resolve, reject) => {
             try {
                 let message = `Error in Geospatial Conditioning Service`;
                 if (this.executionContext.httpStatus === 404) {
                     message = `Unable to locate path '${this.executionContext.req.path}'`;
                 }
-                if (this.executionContext.raw && typeof this.executionContext.raw === 'string') {
-                    message = this.executionContext.raw;
+                if (this.executionContext.document && typeof this.executionContext.document === 'string') {
+                    message = this.executionContext.document;
                 }
 
                 return resolve({
                     data: {
                         code: -1,
-                        comment: args ? args : undefined, // using undefined will prevent the element from being included if args is null
+                        comment: this.processorDef.args ? this.processorDef.args : undefined, // using undefined will prevent the element from being included if args is null
                         correlationId: this.executionContext.correlationId,
                         errors: this.executionContext.errors,
                         message,
@@ -31,7 +31,7 @@ export class ErrorResponse extends BaseProcessor {
                 return reject({
                     data: {
                         code: -1,
-                        comment: args ? args : undefined,
+                        comment: this.processorDef.args ? this.processorDef.args : undefined,
                         correlationId: this.executionContext.correlationId,
                         errors: this.executionContext.errors,
                         message: `Error in Geospatial Conversion Service`,

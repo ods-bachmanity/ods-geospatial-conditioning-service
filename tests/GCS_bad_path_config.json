@@ -1,0 +1,134 @@
+[
+    {
+        "host": "BACHMANITY-GCS-1125049590.us-east-1.elb.amazonaws.com",
+        "testData": [
+            {
+                "testName": "health check",
+                "testNumber": 0,
+                "requestBody": "",
+                "expectedResponse": {
+                    "code": 0,
+                    "message": "",
+                    "errors": [],
+                    "warnings": []
+                }
+            },
+            {
+                "testName": "400 Error: Missing ICORDS Parameter",
+                "testNumber": 1,
+                "requestBody": {
+                    "IGEOLO": "000353N0510942W000429N0510110W000328S0510111W000404S0510941W",
+                    "fingerprint": "123"
+                },
+                "expectedResponse": {
+                    "code": -1,
+                    "correlationId": "0fa2e442-381c-46f3-9e58-812d6ea4e045",
+                    "errors": [
+                        "Parameter ICORDS is required.",
+                        "ExecutionContext.loadParameters: Invalid Request"
+                    ],
+                    "message": "Error in Geospatial Conditioning Service",
+                    "warnings": []
+                }
+            },
+            {
+                "testName": "400 Error: Missing IGEOLO Parameter",
+                "testNumber": 2,
+                "requestBody": {
+                    "ICORDS": "G",
+                    "fingerprint": "123"
+                },
+                "expectedResponse": {
+                    "code": -1,
+                    "correlationId": "b96b02fa-fe58-4f8f-bb1f-28c7ddb20369",
+                    "errors": [
+                        "Parameter IGEOLO is required.",
+                        "ExecutionContext.loadParameters: Invalid Request"
+                    ],
+                    "message": "Error in Geospatial Conditioning Service",
+                    "warnings": []
+                }
+            },
+            {
+                "testName": "400 Error: Invalid IGEOLO Parameter",
+                "testNumber": 3,
+                "requestBody": {
+                    "ICORDS": "G",
+                    "IGEOLO": "2019-03-05T16:51:26.238+00:00",
+                    "fingerprint": "123"
+                },
+                "expectedResponse": {
+                    "code": -1,
+                    "correlationId": "85e9a0b4-51ba-49ee-b100-f64664e2ac7b",
+                    "errors": [
+                        "ExecutionContext.runActvities.error: GeographicCoordsConverter - Invalid IGEOLO: 2019-03-05T16:51:26.238+00:00"
+                    ],
+                    "message": "Error in Geospatial Conditioning Service",
+                    "warnings": []
+                }
+            },
+            {
+                "testName": "400 Error: Invalid ICORDS Parameter",
+                "testNumber": 4,
+                "requestBody": {
+                    "ICORDS": "X",
+                    "IGEOLO": "243127N0541610E243127N0542557E242620N0542557E242620N0541610E",
+                    "fingerprint": "123"
+                },
+                "expectedResponse": {
+                    "code": -1,
+                    "correlationId": "430eca21-e1c3-4b15-9332-8419e889115b",
+                    "errors": [
+                        "Parameter ICORDS is invalid. Not in white list of values.",
+                        "ExecutionContext.loadParameters: Invalid Request"
+                    ],
+                    "message": "Error in Geospatial Conditioning Service",
+                    "warnings": []
+                }
+            },
+            {
+                "testName": "400 Error: Empty JSON Body",
+                "testNumber": 5,
+                "requestBody": {},
+                "expectedResponse": {
+                    "code": -1,
+                    "correlationId": "29b6d777-30d4-4c9f-9d4f-878b23f9d627",
+                    "errors": [
+                        "Parameter ICORDS is required.",
+                        "Parameter IGEOLO is required.",
+                        "ExecutionContext.loadParameters: Invalid Request"
+                    ],
+                    "message": "Error in Geospatial Conditioning Service",
+                    "warnings": []
+                }
+            },
+            {
+                "testName": "404 Error: Invalid Path: GET /v2/ods/geospatialconditionin",
+                "testNumber": 6,
+                "requestBody": {},
+                "expectedResponse": {
+                    "code": -1,
+                    "correlationId": "b4c1a8fc-03eb-413d-9224-2c30849536c5",
+                    "errors": [
+                        "Unable to locate path /v2/ods/geospatialconditionin"
+                    ],
+                    "message": "Unable to locate path /v2/ods/geospatialconditionin",
+                    "warnings": []
+                }
+            },
+            {
+                "testName": "500 Error: Bad JSON Syntax",
+                "testNumber": 7,
+                "requestBody": "{]",
+                "expectedResponse": {
+                    "code": -1,
+                    "errors": [
+                        "Unhandled Exception in service: /v2/ods/geospatialconditioning/nitf21: SyntaxError: Unexpected token \" in JSON at position 0"
+                    ],
+                    "message": "Unhandled Exception in service: /v2/ods/geospatialconditioning/nitf21: SyntaxError: Unexpected token \" in JSON at position 0",
+                    "warnings": []
+                }
+            }
+        ]
+    }
+]
